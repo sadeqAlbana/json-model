@@ -6,19 +6,19 @@ JsonModelRecord::JsonModelRecord()
 
 }
 
-JsonModelRecord::JsonModelRecord(QJsonObject record)
+JsonModelRecord::JsonModelRecord(const QJsonObject &object)
 {
-    m_record=record;
-    for(QString key : record.keys())
-       fields << JsonModelField(key,record.value(key).toVariant()); //change to something more appropriate
+    m_object=object;
+    for(const QString &key : object.keys()){
+       fields << JsonModelField(key,object.value(key)); //change to something more appropriate
+    }
 }
 
 
 JsonModelRecord::JsonModelRecord(QStringList keys)
 {
-    for(QString key : keys)
+    for(const QString &key : keys)
        fields << JsonModelField(key);
-
 }
 
 int JsonModelRecord::count() const
@@ -43,11 +43,11 @@ QVariant JsonModelRecord::value(const QString &name) const //done
 
 bool JsonModelRecord::contains(const QString &name) const //done
 {
-    return indexOf(name) >=0;
+    return (indexOf(name) >=0);
 }
 bool JsonModelRecord::contains(int index) const //done...bug was found here
 {
-    return index > 0 && index <= fields.size();
+    return (index > 0) && ( index <= fields.size() );
 }
 
 QString JsonModelRecord::fieldName(int index) const //done
@@ -90,7 +90,7 @@ JsonModelRecord &JsonModelRecord::operator =(const JsonModelRecord &other)
 
 JsonModelRecord::operator QJsonObject()
 {
-    return m_record;
+    return m_object;
 }
 
 

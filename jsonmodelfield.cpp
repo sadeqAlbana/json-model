@@ -1,5 +1,5 @@
 #include "jsonmodelfield.h"
-
+#include <QDebug>
 JsonModelField::JsonModelField(QString name, QVariant value)
 {
     p_name=name;

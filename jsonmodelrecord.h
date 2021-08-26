@@ -5,12 +5,12 @@
 #include <QVariant>
 #include <QJsonObject>
 #include <QVector>
-#include <models/jsonModel/jsonmodelfield.h>
+#include "jsonmodelfield.h"
 class JsonModelRecord
 {
 public:
     JsonModelRecord();
-    JsonModelRecord(QJsonObject record);
+    JsonModelRecord(const QJsonObject &object);
     JsonModelRecord(QStringList keys);
     int count() const;
     void clear();
@@ -30,7 +30,7 @@ public:
     operator QJsonObject();
 private:
     QVector <JsonModelField> fields;
-    QJsonObject m_record;
+    QJsonObject m_object;
 };
 
 #endif // JSONMODELRECORD_H
