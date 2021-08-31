@@ -11,7 +11,7 @@ class NetworkedJsonModel : public JsonModel
 {
     Q_OBJECT
 public:
-    NetworkedJsonModel(QString Url, const ColumnList &columns, QObject *parent=nullptr);
+    NetworkedJsonModel(QString Url, const ColumnList &columns=ColumnList(), QObject *parent=nullptr);
 
     void refresh();
     Q_INVOKABLE virtual void requestData()=0;

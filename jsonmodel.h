@@ -7,11 +7,12 @@
 #include <QJsonObject>
 
 struct Column{
-    Column(const QString &key, const QString &displayName,const QString &parentKey=QString()):
-    key(key),displayName(displayName),parentKey(parentKey){}
+    Column(const QString &key, const QString &displayName,const QString &parentKey=QString(),const QString &type=QStringLiteral("text")):
+    key(key),displayName(displayName),parentKey(parentKey),type(type){}
     QString key;
     QString displayName;
     QString parentKey;
+    QString type;
 };
 
 class ColumnList : public QList<Column>{
@@ -47,13 +48,13 @@ public:
     explicit JsonModel(QJsonArray data=QJsonArray(), ColumnList columns=ColumnList(), QObject *parent = nullptr);
     // Header:
     ~JsonModel();
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override; //columns compatible
+     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override; //columns compatible
 
     //bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole) override;
 
     // Basic functionality:
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override; //columns compatible
+     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+     int columnCount(const QModelIndex &parent = QModelIndex()) const override; //columns compatible
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override; //columns compatible
     Q_INVOKABLE QJsonObject jsonObject(const int &row) const;
@@ -77,9 +78,16 @@ public:
     JsonModelRecord record(int index) const{return m_records.at(index);}
     bool appendData(const QJsonArray &data);
 
+    Q_INVOKABLE QVariant data(int row,QString key) const;
+    Q_INVOKABLE bool setData(int row, int column, QVariant data);
+    Q_INVOKABLE bool setData(int row, QString key, QVariant data);
+
+    Q_INVOKABLE QVariant data(int row,int column) const;
     Q_INVOKABLE void setupData(const QJsonArray &data);
 
     ColumnList columns() const;
+
+    Q_INVOKABLE int indexOf(const QString &key);
 
     virtual QModelIndex parent(const QModelIndex &child) const override;
     QHash<int, QByteArray> roleNames() const override;

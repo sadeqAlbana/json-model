@@ -59,8 +59,13 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if(index.row() >= rowCount() || index.column() >= columns().count())
+    if(index.row() >= rowCount() || index.column() >= columnCount())
         return QVariant();
+
+
+    if(role==Qt::UserRole && columns().size()){
+        return columns().at(index.column()).type;
+    }
 
     if(role==Qt::DisplayRole || role==Qt::EditRole )
     {
@@ -72,11 +77,14 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
             }
             else{
                 value=m_records.at(index.row()).value(column.parentKey);
-                if(value.type()==QMetaType::QVariantMap){
+                if(value.type()==QMetaType::QVariantMap || value.type()==QMetaType::QJsonValue || value.type()==QMetaType::QJsonObject){
                     value=value.toMap().value(column.key);
                 }
             }
             return value;
+
+        }else{
+            return m_records.at(index.row()).value(index.column());
         }
     }
 
@@ -91,6 +99,8 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
 
     return QVariant();
 }
+
+
 
 QJsonObject JsonModel::jsonObject(const int &row) const
 {
@@ -176,6 +186,26 @@ bool JsonModel::appendData(const QJsonArray &data)
     insertRows(rowCount(),m_buffer.count());
     return true;
 }
+QVariant JsonModel::data(int row, int column) const
+{
+    return data(index(row,column));
+}
+
+
+QVariant JsonModel::data(int row, QString key) const
+{
+    return data(index(row,record().indexOf(key)),Qt::EditRole); //may not work as intended !
+}
+
+bool JsonModel::setData(int row, int column, QVariant data)
+{
+    return setData(index(row,column),data);
+}
+
+bool JsonModel::setData(int row, QString key, QVariant data)
+{
+    return setData(row,indexOf(key),data);
+}
 
 void JsonModel::setupData(const QJsonArray &data)
 {
@@ -210,6 +240,15 @@ ColumnList JsonModel::columns() const
     return m_columns;
 }
 
+int JsonModel::indexOf(const QString &key)
+{
+    for(int i=0; i<columnCount(); i++){
+        if(headerData(i,Qt::Horizontal,Qt::EditRole)==key)
+            return i;
+    }
+    return -1;
+}
+
 QModelIndex JsonModel::parent(const QModelIndex &child) const
 {
     return QModelIndex();
@@ -220,6 +259,11 @@ QModelIndex JsonModel::parent(const QModelIndex &child) const
 QHash<int, QByteArray> JsonModel::roleNames() const
 {
     QHash<int,QByteArray> roles;
+    roles.insert(Qt::DisplayRole, "display");
+
+    if(columns().size()){ //used by qml views to determine delegate
+        roles.insert(Qt::UserRole,"delegateType");
+    }
 
     for (int i=0;i<columnCount();i++) {
      QByteArray roleName=headerData(i,Qt::Horizontal,Qt::EditRole).toString().toUtf8();

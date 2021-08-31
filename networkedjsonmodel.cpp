@@ -1,9 +1,8 @@
 #include "networkedjsonmodel.h"
 #include <QJsonDocument>
 #include <QDebug>
-#include "knetworkmanager.h"
 
-NetworkedJsonModel::NetworkedJsonModel(QString Url,const ColumnList &columns=ColumnList(), QObject *parent) : JsonModel(QJsonArray(),columns,parent), url(Url)
+NetworkedJsonModel::NetworkedJsonModel(QString Url,const ColumnList &columns, QObject *parent) : JsonModel(QJsonArray(),columns,parent), url(Url)
 {
     _currentPage=0;
     _lastPage=-1;
