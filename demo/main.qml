@@ -37,7 +37,7 @@ Window {
 
         onWidthChanged: forceLayout();
 
-        model: DemoModel
+        model: JsonModel
 
         delegate: DelegateChooser{
             role: "delegateType"

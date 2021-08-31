@@ -1,3 +1,10 @@
+/*
+ * Copyright (C) 2021 Sadeq Albana
+ *
+ * Licensed under the GNU Lesser General Public License v3.0 :
+ * https://www.gnu.org/licenses/lgpl-3.0.html
+ */
+
 #include "jsonmodelfield.h"
 #include <QDebug>
 JsonModelField::JsonModelField(QString name, QVariant value)

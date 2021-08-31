@@ -1,7 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <demomodel.h>
+#include "jsonmodel.h"
 int main(int argc, char *argv[])
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -21,12 +21,15 @@ int main(int argc, char *argv[])
         modelData << row;
     }
 
-    DemoModel model(modelData);
+    JsonModel model(modelData,ColumnList() <<
+                    Column{"name","Name",QString(),"text"} <<
+                    Column{"qty","Stock","stock","text"} << //nested key
+                    Column{"value","Value",QString(),"currency"});
 
 
     QQmlApplicationEngine engine;
 
-    engine.rootContext()->setContextProperty("DemoModel",&model);
+    engine.rootContext()->setContextProperty("JsonModel",&model);
 
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
