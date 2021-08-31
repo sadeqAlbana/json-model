@@ -1,16 +1,16 @@
-INCLUDEPATH += $$PWD
+INCLUDEPATH += $$PWD/src
 
 SOURCES += \
-        $$PWD/jsonmodel.cpp \
-        $$PWD/jsonmodelrecord.cpp \
-        $$PWD/jsonmodelfield.cpp \
-        $$PWD/networkedjsonmodel.cpp
+        $$PWD/src/jsonmodel.cpp \
+        $$PWD/src/jsonmodelrecord.cpp \
+        $$PWD/src/jsonmodelfield.cpp \
+        $$PWD/src/networkedjsonmodel.cpp
 
 HEADERS += \
-        $$PWD/jsonmodel.h \
-        $$PWD/jsonmodelrecord.h \
-        $$PWD/jsonmodelfield.h \
-        $$PWD/networkedjsonmodel.h
+        $$PWD/src/jsonmodel.h \
+        $$PWD/src/jsonmodelrecord.h \
+        $$PWD/src/jsonmodelfield.h \
+        $$PWD/src/networkedjsonmodel.h
 
 
 
