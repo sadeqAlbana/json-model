@@ -201,7 +201,7 @@ QVariant JsonModel::data(int row, int column) const
 
 QVariant JsonModel::data(int row, QString key) const
 {
-    return data(index(row,record().indexOf(key)),Qt::EditRole); //may not work as intended !
+    return data(index(row,indexOf(key)),Qt::EditRole); //may not work as intended !
 }
 
 bool JsonModel::setData(int row, int column, QVariant data)
@@ -247,7 +247,7 @@ ColumnList JsonModel::columns() const
     return m_columns;
 }
 
-int JsonModel::indexOf(const QString &key)
+int JsonModel::indexOf(const QString &key) const
 {
     for(int i=0; i<columnCount(); i++){
         if(headerData(i,Qt::Horizontal,Qt::EditRole)==key)

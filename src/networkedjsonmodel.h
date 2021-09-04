@@ -17,6 +17,8 @@ class NetworkResponse;
 class NetworkedJsonModel : public JsonModel
 {
     Q_OBJECT
+    Q_PROPERTY(QString url MEMBER _url READ url NOTIFY urlChanged WRITE setUrl)
+
 public:
     NetworkedJsonModel(QString Url, const ColumnList &columns=ColumnList(), QObject *parent=nullptr);
 
@@ -26,10 +28,14 @@ public:
 
     virtual bool canFetchMore(const QModelIndex &parent) const override;
     void fetchMore(const QModelIndex &parent) override;
+    Q_INVOKABLE void setUrl(const QString &url);
+    Q_INVOKABLE QString url() const;
 
+signals:
+    void urlChanged(QString url);
 
 protected:
-    QString url;
+    QString _url;
     int _lastPage;
     int _currentPage;
     bool _busy;

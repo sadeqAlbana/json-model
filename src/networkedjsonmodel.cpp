@@ -9,7 +9,7 @@
 #include <QJsonDocument>
 #include <QDebug>
 
-NetworkedJsonModel::NetworkedJsonModel(QString Url,const ColumnList &columns, QObject *parent) : JsonModel(QJsonArray(),columns,parent), url(Url)
+NetworkedJsonModel::NetworkedJsonModel(QString Url,const ColumnList &columns, QObject *parent) : JsonModel(QJsonArray(),columns,parent), _url(Url)
 {
     _currentPage=0;
     _lastPage=-1;
@@ -33,18 +33,22 @@ Qt::ItemFlags NetworkedJsonModel::flags(const QModelIndex &index) const
 
 bool NetworkedJsonModel::canFetchMore(const QModelIndex &parent) const
 {
-    qDebug()<<"can fetch more: " << (_currentPage<_lastPage && !_busy);
+    //qDebug()<<"can fetch more: " << (_currentPage<_lastPage && !_busy);
     return (_currentPage<_lastPage && !_busy);
 }
 
 void NetworkedJsonModel::fetchMore(const QModelIndex &parent)
 {
-        requestData();
+    requestData();
 }
 
+void NetworkedJsonModel::setUrl(const QString &url)
+{
+    this->_url=url;
+    emit urlChanged(url);
+}
 
-
-
-
-
-
+QString NetworkedJsonModel::url() const
+{
+    return _url;
+}

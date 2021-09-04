@@ -94,7 +94,7 @@ public:
 
     ColumnList columns() const;
 
-    Q_INVOKABLE int indexOf(const QString &key);
+    Q_INVOKABLE int indexOf(const QString &key) const;
 
     virtual QModelIndex parent(const QModelIndex &child) const override;
     QHash<int, QByteArray> roleNames() const override;
