@@ -63,12 +63,12 @@ public:
      int rowCount(const QModelIndex &parent = QModelIndex()) const override;
      int columnCount(const QModelIndex &parent = QModelIndex()) const override; //columns compatible
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override; //columns compatible
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override; //columns compatible
     Q_INVOKABLE QJsonObject jsonObject(const int &row) const;
 
     // Editable:
     //this method should work but only from views
-    bool setData(const QModelIndex &index, const QVariant &value,
+    virtual bool setData(const QModelIndex &index, const QVariant &value,
                  int role = Qt::EditRole) override; //columns compatible
 
     virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
@@ -97,7 +97,7 @@ public:
     Q_INVOKABLE int indexOf(const QString &key) const;
 
     virtual QModelIndex parent(const QModelIndex &child) const override;
-    QHash<int, QByteArray> roleNames() const override;
+    virtual QHash<int, QByteArray> roleNames() const override;
 
 
 
