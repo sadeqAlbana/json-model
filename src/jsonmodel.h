@@ -15,11 +15,14 @@
 
 struct Column{
     Column(const QString &key, const QString &displayName,const QString &parentKey=QString(),const QString &type=QStringLiteral("text")):
-    key(key),displayName(displayName),parentKey(parentKey),type(type){}
+    key(key),displayName(displayName),parentKey(parentKey),type(type){
+        accessKey= parentKey.isEmpty() ?  key : QString("%1.%2").arg(parentKey).arg(key);
+    }
     QString key;
     QString displayName;
     QString parentKey;
     QString type;
+    QString accessKey;
 };
 
 class ColumnList : public QList<Column>{
@@ -27,7 +30,7 @@ public:
     ColumnList(){}
     bool contains(const QString &key){
         for(const Column &column : *this){
-            if(column.key==key){
+            if(column.accessKey==key){
                 return true;
             }
         }
@@ -41,7 +44,7 @@ public:
     operator QJsonArray(){
         QJsonArray array;
         for(const Column &column : *this)
-            array << column.key;
+            array << column.accessKey;
 
         return array;
     }

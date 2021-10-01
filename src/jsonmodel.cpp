@@ -34,7 +34,7 @@ QVariant JsonModel::headerData(int section, Qt::Orientation orientation, int rol
 
 
     if(role==Qt::EditRole){
-        return  columns().size() ? columns().at(section).key : m_record.fieldName(section);
+        return  columns().size() ? columns().at(section).accessKey : m_record.fieldName(section);
     }
 
     if(role==Qt::DisplayRole){
@@ -80,7 +80,7 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
             QVariant value;
             Column column=columns().at(index.column());
             if(column.parentKey.isNull()){
-                value=m_records.at(index.row()).value(column.key);
+                value=m_records.at(index.row()).value(column.accessKey);
             }
             else{
                 value=m_records.at(index.row()).value(column.parentKey);
@@ -229,7 +229,7 @@ void JsonModel::setupData(const QJsonArray &data)
     QJsonObject record;
     if(columns().size()){ //if columns are defined the use them
         for (const Column &column : columns()) {
-            record[column.key]=QJsonValue();
+            record[column.accessKey]=QJsonValue();
         }
     }
     else{
