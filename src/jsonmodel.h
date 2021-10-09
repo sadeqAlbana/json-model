@@ -18,6 +18,7 @@ struct Column{
     key(key),displayName(displayName),parentKey(parentKey),type(type){
         accessKey= parentKey.isEmpty() ?  key : QString("%1.%2").arg(parentKey).arg(key);
     }
+
     QString key;
     QString displayName;
     QString parentKey;
@@ -27,7 +28,9 @@ struct Column{
 
 class ColumnList : public QList<Column>{
 public:
-    ColumnList(){}
+    ColumnList() : QList<Column>(){}
+    inline ColumnList(std::initializer_list<Column> args) : QList<Column>(args) { }
+
     bool contains(const QString &key){
         for(const Column &column : *this){
             if(column.accessKey==key){
