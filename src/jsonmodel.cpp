@@ -62,7 +62,7 @@ int JsonModel::columnCount(const QModelIndex &parent) const
 }
 
 QVariant JsonModel::data(const QModelIndex &index, int role) const
-{   
+{
     if (!index.isValid())
         return QVariant();
 
