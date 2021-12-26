@@ -18,6 +18,7 @@ NetworkedJsonModel::NetworkedJsonModel(QString Url,const ColumnList &columns, QO
 
 void NetworkedJsonModel::refresh()
 {
+    _currentPage=0;
     requestData();
 }
 
@@ -51,4 +52,15 @@ void NetworkedJsonModel::setUrl(const QString &url)
 QString NetworkedJsonModel::url() const
 {
     return _url;
+}
+
+void NetworkedJsonModel::setCurrentPage(int currentPage)
+{
+    m_currentPage = currentPage;
+    emit currentPageChanged(m_currentPage);
+}
+
+int NetworkedJsonModel::currentPage() const
+{
+    return m_currentPage;
 }

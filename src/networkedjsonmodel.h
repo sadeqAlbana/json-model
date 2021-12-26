@@ -18,11 +18,12 @@ class NetworkedJsonModel : public JsonModel
 {
     Q_OBJECT
     Q_PROPERTY(QString url MEMBER _url READ url NOTIFY urlChanged WRITE setUrl)
+    Q_PROPERTY(int currentPage MEMBER m_currentPage READ currentPage NOTIFY currentPageChanged WRITE setCurrentPage)
 
 public:
     NetworkedJsonModel(QString Url, const ColumnList &columns=ColumnList(), QObject *parent=nullptr);
 
-    void refresh();
+    Q_INVOKABLE void refresh();
     Q_INVOKABLE virtual void requestData()=0;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
 
@@ -30,15 +31,19 @@ public:
     void fetchMore(const QModelIndex &parent) override;
     Q_INVOKABLE void setUrl(const QString &url);
     Q_INVOKABLE QString url() const;
+    void setCurrentPage(int currentPage);
+    int currentPage() const;
 
 signals:
     void urlChanged(QString url);
+    void currentPageChanged(int page);
 
 protected:
     QString _url;
     int _lastPage;
     int _currentPage;
     bool _busy;
+    int m_currentPage;
 
 signals:
     void dataRecevied();
