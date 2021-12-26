@@ -105,7 +105,7 @@ public:
     virtual QModelIndex parent(const QModelIndex &child) const override;
     virtual QHash<int, QByteArray> roleNames() const override;
 
-
+    virtual QJsonArray filterData(QJsonArray data);
 
 
 protected:

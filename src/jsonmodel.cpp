@@ -281,3 +281,8 @@ QHash<int, QByteArray> JsonModel::roleNames() const
 
     return roles;
 }
+
+QJsonArray JsonModel::filterData(QJsonArray data)
+{
+    return data;
+}
