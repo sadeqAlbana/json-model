@@ -13,6 +13,15 @@ JsonModel::JsonModel(QJsonArray data, ColumnList columns, QObject *parent) : QAb
 {
     if(!data.isEmpty())
         setupData(data);
+    else{
+        if(columns.size()){ //if columns are defined the use them
+            QJsonObject record;
+            for (const Column &column : columns) {
+                record[column.accessKey]=QJsonValue();
+            }
+            m_record=record;
+        }
+    }
 }
 
 JsonModel::~JsonModel()
@@ -120,8 +129,7 @@ bool JsonModel::setData(const QModelIndex &index, const QVariant &value, int rol
         return false;
 
     if (data(index, role) != value) {
-
-        QString key=headerData(index.column(),Qt::Horizontal).toString();
+        QString key=headerData(index.column(),Qt::Horizontal,Qt::EditRole).toString();
         m_records[index.row()].setValue(key,value);
         emit dataChanged(index, index, QVector<int>() << role);
         return true;
@@ -183,9 +191,12 @@ JsonModelRecord JsonModel::record() const
     return m_record;
 }
 
+/*
+must call beginInsertRows before inserting data and endInsertRows after inserting,
+thus we use this method that uses a buffer to append json data
+*/
 bool JsonModel::appendData(const QJsonArray &data)
 {
-
     for(const QJsonValue &row : data)
     {
         m_buffer << JsonModelRecord(row.toObject());
@@ -245,6 +256,12 @@ void JsonModel::setupData(const QJsonArray &data)
 ColumnList JsonModel::columns() const
 {
     return m_columns;
+}
+
+void JsonModel::appendRecord(const QJsonObject &record)
+{
+    m_buffer << record;
+    insertRows(rowCount(),1);
 }
 
 int JsonModel::indexOf(const QString &key) const

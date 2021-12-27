@@ -99,6 +99,7 @@ public:
     Q_INVOKABLE void setupData(const QJsonArray &data);
 
     ColumnList columns() const;
+    Q_INVOKABLE void appendRecord(const QJsonObject &record);
 
     Q_INVOKABLE int indexOf(const QString &key) const;
 
