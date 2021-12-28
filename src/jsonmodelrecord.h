@@ -27,8 +27,8 @@ public:
     bool contains(int index) const;
     QString fieldName(int index) const;
     int indexOf(const QString &Name) const;
-    void setValue(int index, const QVariant &value);
-    void setValue(const QString &name, const QVariant &value);
+    bool setValue(int index, const QVariant &value);
+    bool setValue(const QString &name, const QVariant &value);
 
 
     bool operator ==(const JsonModelRecord &other) const;

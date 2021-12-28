@@ -128,6 +128,8 @@ bool JsonModel::setData(const QModelIndex &index, const QVariant &value, int rol
     if(index.row()>=rowCount() || index.column() >=columnCount())
         return false;
 
+
+
     if (data(index, role) != value) {
         QString key=headerData(index.column(),Qt::Horizontal,Qt::EditRole).toString();
         m_records[index.row()].setValue(key,value);
@@ -165,6 +167,19 @@ bool JsonModel::insertRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
+bool JsonModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    if(count>rowCount() || row>=rowCount())
+        return false;
+
+    beginRemoveRows(parent,row,row+count-1);
+    m_records.remove(row,count);
+
+    endRemoveRows();
+
+    return true;
+}
+
 /*bool JsonModel::insertColumns(int column, int count, const QModelIndex &parent)
 {
     beginInsertColumns(parent, column, column + count - 1);
@@ -172,12 +187,7 @@ bool JsonModel::insertRows(int row, int count, const QModelIndex &parent)
     endInsertColumns();
 }*/
 
-/*bool JsonModel::removeRows(int row, int count, const QModelIndex &parent)
-{
-    beginRemoveRows(parent, row, row + count - 1);
-    // FIXME: Implement me senpai!
-    endRemoveRows();
-}*/
+
 
 /*bool JsonModel::removeColumns(int column, int count, const QModelIndex &parent)
 {
@@ -223,6 +233,11 @@ bool JsonModel::setData(int row, int column, QVariant data)
 bool JsonModel::setData(int row, QString key, QVariant data)
 {
     return setData(row,indexOf(key),data);
+}
+
+bool JsonModel::removeRecord(int row)
+{
+    return JsonModel::removeRow(row);
 }
 
 void JsonModel::setupData(const QJsonArray &data)

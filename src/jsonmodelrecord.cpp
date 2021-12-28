@@ -54,7 +54,7 @@ bool JsonModelRecord::contains(const QString &name) const //done
 }
 bool JsonModelRecord::contains(int index) const //done...bug was found here
 {
-    return (index > 0) && ( index <= fields.size() );
+    return (index >= 0) && ( index <= fields.size() );
 }
 
 QString JsonModelRecord::fieldName(int index) const //done
@@ -71,17 +71,18 @@ int JsonModelRecord::indexOf(const QString &name) const //done
     return -1;
 }
 
-void JsonModelRecord::setValue(int index, const QVariant &value) //done
+bool JsonModelRecord::setValue(int index, const QVariant &value) //done
 {
     if(!contains(index))
-        return;
+        return false;
 
     fields[index].setValue(value);
+    return true;
 }
 
-void JsonModelRecord::setValue(const QString &name, const QVariant &value) //done
+bool JsonModelRecord::setValue(const QString &name, const QVariant &value) //done
 {
-    setValue(indexOf(name),value);
+    return setValue(indexOf(name),value);
 }
 
 bool JsonModelRecord::operator ==(const JsonModelRecord &other) const

@@ -84,7 +84,7 @@ public:
     //bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
 
     // Remove data:
-    //bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     //bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
 
     JsonModelRecord record() const;
@@ -94,6 +94,7 @@ public:
     Q_INVOKABLE QVariant data(int row,QString key) const;
     Q_INVOKABLE bool setData(int row, int column, QVariant data);
     Q_INVOKABLE bool setData(int row, QString key, QVariant data);
+    Q_INVOKABLE bool removeRecord(int row);
 
     Q_INVOKABLE QVariant data(int row,int column) const;
     Q_INVOKABLE void setupData(const QJsonArray &data);
@@ -110,7 +111,7 @@ public:
 
 
 protected:
-    QVector<QMap<QString,QJsonValue>> m;
+//    QVector<QMap<QString,QJsonValue>> m;
     QVector<JsonModelRecord> m_records;
     QVector<JsonModelRecord> m_buffer;
 
