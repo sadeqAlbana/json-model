@@ -20,6 +20,10 @@ JsonModel::JsonModel(QJsonArray data, ColumnList columns, QObject *parent) : QAb
                 record[column.accessKey]=QJsonValue();
             }
             m_record=record;
+//            qDebug()<<record.keys();
+//            for(int i=0; i<m_record.count(); i++){
+//                qDebug()<<m_record.fieldName(i);
+//            }
         }
     }
 }
@@ -83,6 +87,7 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
         return columns().at(index.column()).type;
     }
 
+
     if(role==Qt::DisplayRole || role==Qt::EditRole )
     {
         if(columns().size()){
@@ -127,14 +132,45 @@ bool JsonModel::setData(const QModelIndex &index, const QVariant &value, int rol
 {
     if(index.row()>=rowCount() || index.column() >=columnCount())
         return false;
-
-
-
+    //qDebug()<<"set data: " << value;
     if (data(index, role) != value) {
         QString key=headerData(index.column(),Qt::Horizontal,Qt::EditRole).toString();
-        m_records[index.row()].setValue(key,value);
-        emit dataChanged(index, index, QVector<int>() << role);
-        return true;
+        //qDebug()<<"key: " <<key;
+        //m_records[index.row()].setValue(key,value);
+
+        if(role==Qt::DisplayRole || role==Qt::EditRole )
+        {
+            if(columns().size()){
+                Column column=columns().at(index.column());
+                if(column.parentKey.isNull()){
+                    //value=m_records.at(index.row()).value(column.accessKey);
+                    m_records[index.row()].setValue(column.accessKey,value);
+                }
+                else{
+                    QJsonObject object=m_records.at(index.row()).value(column.parentKey).toJsonObject();
+                    object[column.key]=value.toJsonValue(); //might not work
+                    m_records[index.row()].setValue(column.parentKey,object);
+                    //value=m_records.at(index.row()).value(column.parentKey);
+
+                }
+
+            }else{
+                m_records[index.row()].setValue(index.column(),value);
+            }
+
+            //emit dataChanged(index, index, QVector<int>() << role);
+            emit dataChanged(index, index); //assume all roles have changed, inefficent !
+            //must emit this signle with the the other data role eg
+
+            return true;
+        }
+
+        if(role>Qt::UserRole){ //used for QML views
+            int column=role-(Qt::UserRole+1);
+            return setData(this->index(index.row(),column),value);
+        }
+
+        return false;
     }
     return false;
 }
