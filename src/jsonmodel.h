@@ -9,7 +9,6 @@
 #define JSONMODEL_H
 
 #include <QAbstractTableModel>
-#include "jsonmodelrecord.h"
 #include <QJsonArray>
 #include <QJsonObject>
 
@@ -87,9 +86,11 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     //bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
 
-    JsonModelRecord record() const;
-    JsonModelRecord record(int index) const{return m_records.at(index);}
+    QJsonObject record() const;
+    QJsonObject record(int index) const;
     bool appendData(const QJsonArray &data);
+    QString fieldName(int index) const;
+
 
     Q_INVOKABLE QVariant data(int row,QString key) const;
     Q_INVOKABLE bool setData(int row, int column, QVariant data);
@@ -114,10 +115,10 @@ public:
 
 protected:
 //    QVector<QMap<QString,QJsonValue>> m;
-    QVector<JsonModelRecord> m_records;
-    QVector<JsonModelRecord> m_buffer;
+    QJsonArray m_records;
+    QJsonArray m_buffer;
 
-    JsonModelRecord m_record;
+    QJsonObject m_record;
     ColumnList m_columns;
 };
 
