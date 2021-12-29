@@ -109,6 +109,8 @@ public:
 
     virtual QJsonArray filterData(QJsonArray data);
 
+    Q_INVOKABLE QJsonArray toJsonArray() const;
+
 
 protected:
 //    QVector<QMap<QString,QJsonValue>> m;

@@ -144,7 +144,7 @@ bool JsonModel::setData(const QModelIndex &index, const QVariant &value, int rol
                 Column column=columns().at(index.column());
                 if(column.parentKey.isNull()){
                     //value=m_records.at(index.row()).value(column.accessKey);
-                    m_records[index.row()].setValue(column.accessKey,value);
+                    m_records[index.row()].setValue(column.accessKey,value.toJsonValue());
                 }
                 else{
                     QJsonObject object=m_records.at(index.row()).value(column.parentKey).toJsonObject();
@@ -155,7 +155,7 @@ bool JsonModel::setData(const QModelIndex &index, const QVariant &value, int rol
                 }
 
             }else{
-                m_records[index.row()].setValue(index.column(),value);
+                m_records[index.row()].setValue(index.column(),value.toJsonValue());
             }
 
             //emit dataChanged(index, index, QVector<int>() << role);
@@ -353,4 +353,14 @@ QHash<int, QByteArray> JsonModel::roleNames() const
 QJsonArray JsonModel::filterData(QJsonArray data)
 {
     return data;
+}
+
+QJsonArray JsonModel::toJsonArray() const
+{
+    QJsonArray array;
+    for(int i=0; i<rowCount(); i++){
+        array << jsonObject(i);
+    }
+
+    return array;
 }

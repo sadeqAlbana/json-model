@@ -71,7 +71,7 @@ int JsonModelRecord::indexOf(const QString &name) const //done
     return -1;
 }
 
-bool JsonModelRecord::setValue(int index, const QVariant &value) //done
+bool JsonModelRecord::setValue(int index, const QJsonValue &value) //done
 {
     if(!contains(index))
         return false;
@@ -80,7 +80,7 @@ bool JsonModelRecord::setValue(int index, const QVariant &value) //done
     return true;
 }
 
-bool JsonModelRecord::setValue(const QString &name, const QVariant &value) //done
+bool JsonModelRecord::setValue(const QString &name, const QJsonValue &value) //done
 {
     return setValue(indexOf(name),value);
 }

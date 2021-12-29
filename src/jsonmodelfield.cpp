@@ -7,7 +7,7 @@
 
 #include "jsonmodelfield.h"
 #include <QDebug>
-JsonModelField::JsonModelField(QString name, QVariant value)
+JsonModelField::JsonModelField(QString name, QJsonValue value)
 {
     p_name=name;
     p_value=value;
@@ -23,12 +23,12 @@ void JsonModelField::setName(const QString &name)
     p_name = name;
 }
 
-QVariant JsonModelField::value() const
+QJsonValue JsonModelField::value() const
 {
     return p_value;
 }
 
-void JsonModelField::setValue(const QVariant &value)
+void JsonModelField::setValue(const QJsonValue &value)
 {
     p_value = value;
 }

@@ -9,16 +9,16 @@
 #define JSONMODELFIELD_H
 #include <QString>
 #include <QVariant>
-
+#include <QJsonValue>
 class JsonModelField
 {
 public:
-    JsonModelField(QString name=QString(),QVariant value=QVariant());
+    JsonModelField(QString name=QString(),QJsonValue value=QJsonValue());
 
     QString name() const;
-    QVariant value() const;
+    QJsonValue value() const;
     void setName(const QString &value);
-    void setValue(const QVariant &value);
+    void setValue(const QJsonValue &value);
 
     bool operator ==(const JsonModelField &other) const;
 
@@ -26,7 +26,7 @@ public:
 
 private:
     QString p_name;
-    QVariant p_value;
+    QJsonValue p_value;
 };
 
 #endif // JSONMODELFIELD_H
