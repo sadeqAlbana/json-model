@@ -56,6 +56,7 @@ class JsonModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
+    Q_PROPERTY(bool checkable MEMBER m_checkable READ checkable WRITE setCheckable NOTIFY checkableChanged)
 //    explicit JsonModel(QObject *parent = nullptr);
     explicit JsonModel(QJsonArray data=QJsonArray(), ColumnList columns=ColumnList(), QObject *parent = nullptr);
     // Header:
@@ -113,13 +114,24 @@ public:
     Q_INVOKABLE QJsonArray toJsonArray() const;
 
 
+    bool checkable() const;
+    void setCheckable(bool checkable);
+
+    QSet<int> checkedRows();
+
+signals:
+    void checkableChanged(bool checkable);
+
 protected:
-//    QVector<QMap<QString,QJsonValue>> m;
+    //    QVector<QMap<QString,QJsonValue>> m;
     QJsonArray m_records;
     QJsonArray m_buffer;
 
     QJsonObject m_record;
     ColumnList m_columns;
+    bool m_checkable=false;
+
+    QMap<int,Qt::CheckState> m_checkList;
 };
 
 #endif // JSONMODEL_H
