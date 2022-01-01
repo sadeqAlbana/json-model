@@ -88,7 +88,7 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
     }
 
     if(role==Qt::CheckStateRole && checkable()){
-        return m_checkList.value(index.row(),Qt::Unchecked);
+        return m_checkList.value(index.row(),Qt::Checked);
     }
 
 
@@ -145,6 +145,8 @@ bool JsonModel::setData(const QModelIndex &index, const QVariant &value, int rol
 
         if(role==Qt::CheckStateRole && checkable()){
             m_checkList[index.row()]=static_cast<Qt::CheckState>(value.toInt());
+            emit dataChanged(index, index); //assume all roles have changed, inefficent !
+            return true;
         }
 
         if(role==Qt::DisplayRole || role==Qt::EditRole )
@@ -380,13 +382,16 @@ QHash<int, QByteArray> JsonModel::roleNames() const
     QHash<int,QByteArray> roles;
     roles.insert(Qt::DisplayRole, "display");
 
+    if(checkable()){
+        roles.insert(Qt::CheckStateRole,"checkState");
+    }
+
+
     if(columns().size()){ //used by qml views to determine delegate
         roles.insert(Qt::UserRole,"delegateType");
     }
 
-    if(checkable()){
-        roles.insert(Qt::CheckStateRole,"checkState");
-    }
+
 
     for (int i=0;i<columnCount();i++) {
      QByteArray roleName=headerData(i,Qt::Horizontal,Qt::EditRole).toString().toUtf8();
