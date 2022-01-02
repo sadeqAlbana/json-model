@@ -372,6 +372,8 @@ int JsonModel::indexOf(const QString &key) const
 
 QModelIndex JsonModel::parent(const QModelIndex &child) const
 {
+    Q_UNUSED(child);
+
     return QModelIndex();
 }
 

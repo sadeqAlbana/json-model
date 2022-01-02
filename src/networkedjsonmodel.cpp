@@ -34,12 +34,14 @@ Qt::ItemFlags NetworkedJsonModel::flags(const QModelIndex &index) const
 
 bool NetworkedJsonModel::canFetchMore(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     //qDebug()<<"can fetch more: " << (_currentPage<_lastPage && !_busy);
     return (_currentPage<_lastPage && !_busy);
 }
 
 void NetworkedJsonModel::fetchMore(const QModelIndex &parent)
 {
+    Q_UNUSED(parent);
     requestData();
 }
 
