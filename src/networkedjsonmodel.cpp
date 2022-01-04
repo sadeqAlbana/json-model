@@ -11,14 +11,13 @@
 
 NetworkedJsonModel::NetworkedJsonModel(QString Url,const ColumnList &columns, QObject *parent) : JsonModel(QJsonArray(),columns,parent), _url(Url)
 {
-    _currentPage=0;
-    _lastPage=-1;
+
 }
 
 
 void NetworkedJsonModel::refresh()
 {
-    _currentPage=0;
+    m_currentPage=0;
     requestData();
 }
 
@@ -36,7 +35,7 @@ bool NetworkedJsonModel::canFetchMore(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     //qDebug()<<"can fetch more: " << (_currentPage<_lastPage && !_busy);
-    return (_currentPage<_lastPage && !_busy);
+    return (m_currentPage<_lastPage && !_busy);
 }
 
 void NetworkedJsonModel::fetchMore(const QModelIndex &parent)

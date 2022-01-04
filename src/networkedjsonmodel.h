@@ -40,10 +40,9 @@ signals:
 
 protected:
     QString _url;
-    int _lastPage;
-    int _currentPage;
+    int _lastPage=-1;
     bool _busy;
-    int m_currentPage;
+    int m_currentPage=0;
 
 signals:
     void dataRecevied();
