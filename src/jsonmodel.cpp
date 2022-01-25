@@ -233,12 +233,15 @@ bool JsonModel::insertRows(int row, int count, const QModelIndex &parent)
 
 bool JsonModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    if(count>rowCount() || row>=rowCount())
+    if(row<0 || count<1)
+        return false;
+
+    if(row+count>rowCount())
         return false;
 
     beginRemoveRows(parent,row,row+count-1);
     //m_records.remove(row,count);
-    for(int i=row; i<=count; i++){
+    for(int i=row; i<row+count; i++){
         m_records.removeAt(row);
     }
 
