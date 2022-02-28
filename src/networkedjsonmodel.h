@@ -22,6 +22,7 @@ class NetworkedJsonModel : public JsonModel
 
 public:
     NetworkedJsonModel(QString Url, const ColumnList &columns=ColumnList(), QObject *parent=nullptr);
+    NetworkedJsonModel(const ColumnList &columns=ColumnList(), QObject *parent=nullptr);
 
     Q_INVOKABLE void refresh();
     Q_INVOKABLE virtual void requestData()=0;

@@ -14,6 +14,11 @@ NetworkedJsonModel::NetworkedJsonModel(QString Url,const ColumnList &columns, QO
 
 }
 
+NetworkedJsonModel::NetworkedJsonModel(const ColumnList &columns, QObject *parent) : JsonModel(QJsonArray(),columns,parent)
+{
+
+}
+
 
 void NetworkedJsonModel::refresh()
 {
