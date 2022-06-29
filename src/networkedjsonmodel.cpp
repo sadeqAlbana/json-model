@@ -39,7 +39,10 @@ Qt::ItemFlags NetworkedJsonModel::flags(const QModelIndex &index) const
 bool NetworkedJsonModel::canFetchMore(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    //qDebug()<<"can fetch more: " << (_currentPage<_lastPage && !_busy);
+
+    if(!m_hasPagination)
+        return false;
+
     return (m_currentPage<_lastPage && !_busy);
 }
 
@@ -69,4 +72,9 @@ void NetworkedJsonModel::setCurrentPage(int currentPage)
 int NetworkedJsonModel::currentPage() const
 {
     return m_currentPage;
+}
+
+bool NetworkedJsonModel::hasPagination() const
+{
+    return m_hasPagination;
 }

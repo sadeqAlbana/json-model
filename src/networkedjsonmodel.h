@@ -35,12 +35,15 @@ public:
     void setCurrentPage(int currentPage);
     int currentPage() const;
 
+    bool hasPagination() const;
+
 signals:
     void urlChanged(QString url);
     void currentPageChanged(int page);
 
 protected:
     QString _url;
+    bool m_hasPagination=false;
     int _lastPage=-1;
     bool _busy;
     int m_currentPage=0;
