@@ -119,6 +119,8 @@ public:
 
     QSet<int> checkedRows();
 
+    Q_INVOKABLE bool insertRecord(const QJsonObject &record);
+
 signals:
     void checkableChanged(bool checkable);
 

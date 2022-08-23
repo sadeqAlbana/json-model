@@ -217,7 +217,11 @@ bool JsonModel::insertRows(int row, int count, const QModelIndex &parent)
     beginInsertRows(parent, row, row + count - 1);
 
     for(int i=0; i<count; i++){
-        m_records << m_buffer[i];
+        if(row==rowCount()){
+            m_records << m_buffer[i];
+        }else{
+            m_records.insert(row+i,m_buffer[i]);
+        }
     }
 
     //m_buffer.remove(0,count);
@@ -439,4 +443,10 @@ QSet<int> JsonModel::checkedRows()
   }
 
   return checked;
+}
+
+bool JsonModel::insertRecord(const QJsonObject &record)
+{
+    m_buffer << record;
+    return insertRows(0,1);
 }
