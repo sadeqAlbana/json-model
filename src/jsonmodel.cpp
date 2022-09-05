@@ -88,7 +88,7 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
     }
 
     if(role==Qt::CheckStateRole && checkable()){
-        return m_checkList.value(index.row(),Qt::Checked);
+        return m_checkList.value(index.row(),Qt::Unchecked);
     }
 
 
