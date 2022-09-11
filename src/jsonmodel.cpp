@@ -19,7 +19,7 @@ JsonModel::JsonModel(QJsonArray data, ColumnList columns, QObject *parent) : QAb
             for (const Column &column : columns) {
                 record[column.accessKey]=QJsonValue();
             }
-            m_record=record;
+            setRecord(record);
 //            qDebug()<<record.keys();
 //            for(int i=0; i<m_record.count(); i++){
 //                qDebug()<<fieldName(i);
@@ -449,4 +449,17 @@ bool JsonModel::insertRecord(const QJsonObject &record)
 {
     m_buffer << record;
     return insertRows(0,1);
+}
+
+void JsonModel::setRecord(const QJsonObject &newRecord)
+{
+    if (m_record == newRecord)
+        return;
+    m_record = newRecord;
+    emit recordChanged();
+}
+
+void JsonModel::resetRecord()
+{
+    setRecord({}); // TODO: Adapt to use your actual default value
 }

@@ -121,8 +121,13 @@ public:
 
     Q_INVOKABLE bool insertRecord(const QJsonObject &record);
 
+    void setRecord(const QJsonObject &newRecord);
+    void resetRecord();
+
 signals:
     void checkableChanged(bool checkable);
+
+    void recordChanged();
 
 protected:
     //    QVector<QMap<QString,QJsonValue>> m;
@@ -134,6 +139,8 @@ protected:
     bool m_checkable=false;
 
     QMap<int,Qt::CheckState> m_checkList;
+private:
+    Q_PROPERTY(QJsonObject record READ record WRITE setRecord RESET resetRecord NOTIFY recordChanged)
 };
 
 #endif // JSONMODEL_H
