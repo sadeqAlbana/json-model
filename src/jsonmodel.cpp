@@ -102,7 +102,8 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
             }
             else{
                 value=m_records.at(index.row()).toObject().value(column.parentKey);
-                if(value.type()==QMetaType::QVariantMap || value.type()==QMetaType::QJsonValue || value.type()==QMetaType::QJsonObject){
+                QMetaType::Type type=static_cast<QMetaType::Type>(value.typeId());
+                if(type==QMetaType::QVariantMap || type==QMetaType::QJsonValue || type==QMetaType::QJsonObject){
                     value=value.toMap().value(column.key);
                 }
             }
