@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.16)
 
-find_package(Qt6  COMPONENTS Core REQUIRED)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
-add_library(json-model STATIC
+add_library(JsonModel STATIC
     jsonmodel.cpp jsonmodel.h
     networkedjsonmodel.cpp networkedjsonmodel.h
 )
 
-target_link_libraries(json-model PRIVATE Qt6::Core)
-target_include_directories(json-model INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(JsonModel PRIVATE Qt${QT_VERSION_MAJOR}::Core)
+
+target_include_directories(JsonModel INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
