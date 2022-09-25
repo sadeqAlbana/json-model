@@ -7,4 +7,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(src)
+
+if(JSONMODEL_BUILD_EXAMPLES)
 add_subdirectory(examples)
+endif()
