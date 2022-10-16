@@ -9,15 +9,20 @@
 #include <QDebug>
 
 
-JsonModel::JsonModel(QJsonArray data, ColumnList columns, QObject *parent) : QAbstractTableModel(parent),m_columns(columns)
+JsonModel::JsonModel(QObject *parent) : QAbstractTableModel(parent)
+{
+    qDebug()<<"this called";
+}
+
+JsonModel::JsonModel(QJsonArray data, JsonModelColumnList columns, QObject *parent) : QAbstractTableModel(parent),m_columns(columns)
 {
     if(!data.isEmpty())
-        setupData(data);
+        setRecords(data);
     else{
         if(columns.size()){ //if columns are defined the use them
             QJsonObject record;
-            for (const Column &column : columns) {
-                record[column.accessKey]=QJsonValue();
+            for (const JsonModelColumn &column : columns) {
+                record[column.m_accessKey]=QJsonValue();
             }
             setRecord(record);
 //            qDebug()<<record.keys();
@@ -47,11 +52,11 @@ QVariant JsonModel::headerData(int section, Qt::Orientation orientation, int rol
 
 
     if(role==Qt::EditRole){
-        return  columns().size() ? columns().at(section).accessKey : fieldName(section);
+        return  columns().size() ? columns().at(section).m_accessKey : fieldName(section);
     }
 
     if(role==Qt::DisplayRole){
-        return  columns().size() ? columns().at(section).displayName : fieldName(section);
+        return  columns().size() ? columns().at(section).m_displayName : fieldName(section);
     }
 
     return QVariant();
@@ -84,7 +89,7 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
 
 
     if(role==Qt::UserRole && columns().size()){
-        return columns().at(index.column()).type;
+        return columns().at(index.column()).m_type;
     }
 
     if(role==Qt::CheckStateRole && checkable()){
@@ -96,15 +101,15 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
     {
         if(columns().size()){
             QVariant value;
-            Column column=columns().at(index.column());
-            if(column.parentKey.isNull()){
-                value=m_records.at(index.row()).toObject().value(column.accessKey);
+            JsonModelColumn column=columns().at(index.column());
+            if(column.m_parentKey.isNull()){
+                value=m_records.at(index.row()).toObject().value(column.m_accessKey);
             }
             else{
-                value=m_records.at(index.row()).toObject().value(column.parentKey);
+                value=m_records.at(index.row()).toObject().value(column.m_parentKey);
                 QMetaType::Type type=static_cast<QMetaType::Type>(value.typeId());
                 if(type==QMetaType::QVariantMap || type==QMetaType::QJsonValue || type==QMetaType::QJsonObject){
-                    value=value.toMap().value(column.key);
+                    value=value.toMap().value(column.m_key);
                 }
             }
             return value;
@@ -153,25 +158,25 @@ bool JsonModel::setData(const QModelIndex &index, const QVariant &value, int rol
         if(role==Qt::DisplayRole || role==Qt::EditRole )
         {
             if(columns().size()){
-                Column column=columns().at(index.column());
-                if(column.parentKey.isNull()){
+                JsonModelColumn column=columns().at(index.column());
+                if(column.m_parentKey.isNull()){
                     //value=m_records.at(index.row()).value(column.accessKey);
-                    m_records[index.row()].toObject()[column.accessKey]=value.toJsonValue();
+                    m_records[index.row()].toObject()[column.m_accessKey]=value.toJsonValue();
                     QJsonObject obj=m_records[index.row()].toObject();
-                    obj[column.accessKey]=value.toJsonValue();
+                    obj[column.m_accessKey]=value.toJsonValue();
                     m_records[index.row()]=obj;
                 }
                 else{
-                    m_records.at(index.row()).toObject()[column.parentKey].toObject()[column.key]=value.toJsonValue();
+                    m_records.at(index.row()).toObject()[column.m_parentKey].toObject()[column.m_key]=value.toJsonValue();
                     QJsonObject obj=m_records[index.row()].toObject();
-                    QJsonObject child=obj[column.parentKey].toObject();
-                    child[column.key]=value.toJsonValue();
-                    obj[column.parentKey]=child;
+                    QJsonObject child=obj[column.m_parentKey].toObject();
+                    child[column.m_key]=value.toJsonValue();
+                    obj[column.m_parentKey]=child;
                     m_records[index.row()]=obj;
 
                     //object[column.key]=value.toJsonValue(); //might not work
-                    //m_records[index.row()].setValue(column.parentKey,object);
-                    //value=m_records.at(index.row()).value(column.parentKey);
+                    //m_records[index.row()].setValue(column.m_parentKey,object);
+                    //value=m_records.at(index.row()).value(column.m_parentKey);
 
                 }
 
@@ -255,20 +260,20 @@ bool JsonModel::removeRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
-/*bool JsonModel::insertColumns(int column, int count, const QModelIndex &parent)
+/*bool JsonModel::insertJsonModelColumns(int column, int count, const QModelIndex &parent)
 {
-    beginInsertColumns(parent, column, column + count - 1);
+    beginInsertJsonModelColumns(parent, column, column + count - 1);
     // FIXME: Implement me!
-    endInsertColumns();
+    endInsertJsonModelColumns();
 }*/
 
 
 
-/*bool JsonModel::removeColumns(int column, int count, const QModelIndex &parent)
+/*bool JsonModel::removeJsonModelColumns(int column, int count, const QModelIndex &parent)
 {
-    beginRemoveColumns(parent, column, column + count - 1);
+    beginRemoveJsonModelColumns(parent, column, column + count - 1);
     // FIXME: Implement me!
-    endRemoveColumns();
+    endRemoveJsonModelColumns();
 }*/
 
 QJsonObject JsonModel::record() const
@@ -329,23 +334,25 @@ bool JsonModel::removeRecord(int row)
     return JsonModel::removeRow(row);
 }
 
-void JsonModel::setupData(const QJsonArray &data)
+void JsonModel::setRecords(const QJsonArray &data)
 {
     beginResetModel();
-
+    qDebug()<<data;
     m_record=QJsonObject();
-    m_records=QJsonArray();
     m_buffer=QJsonArray();
-    for(const QJsonValue &row : data)
-    {
-        m_records << row.toObject();
-    }
+//    for(const QJsonValue &row : data)
+//    {
+//        m_records << row.toObject();
+//    }
+
+
+    m_records=data;
 
 
     QJsonObject record;
     if(columns().size()){ //if columns are defined the use them
-        for (const Column &column : columns()) {
-            record[column.accessKey]=QJsonValue();
+        for (const JsonModelColumn &column : columns()) {
+            record[column.m_accessKey]=QJsonValue();
         }
     }
     else{
@@ -353,12 +360,15 @@ void JsonModel::setupData(const QJsonArray &data)
         for(const QString &key: record.keys())
             record.insert(key,QJsonValue()); //clear it's values
     }
-    m_record=record;
+    setRecord(record);
     endResetModel();
+
+
+    emit recordsChanged();
 }
 
 
-ColumnList JsonModel::columns() const
+JsonModelColumnList JsonModel::columns() const
 {
     return m_columns;
 }
@@ -462,5 +472,21 @@ void JsonModel::setRecord(const QJsonObject &newRecord)
 
 void JsonModel::resetRecord()
 {
-    setRecord({}); // TODO: Adapt to use your actual default value
+    setRecord({});
 }
+
+void JsonModel::resetRecords()
+{
+    m_records=QJsonArray();
+}
+
+const QJsonArray &JsonModel::records() const
+{
+    return m_records;
+}
+
+
+
+
+
+

@@ -11,42 +11,30 @@
 #include <QAbstractTableModel>
 #include <QJsonArray>
 #include <QJsonObject>
-
-struct Column{
-    Column(const QString &key, const QString &displayName,const QString &parentKey=QString(),const QString &type=QStringLiteral("text")):
-    key(key),displayName(displayName),parentKey(parentKey),type(type){
-        accessKey= parentKey.isEmpty() ?  key : QString("%1.%2").arg(parentKey).arg(key);
-    }
-
-    QString key;
-    QString displayName;
-    QString parentKey;
-    QString type;
-    QString accessKey;
-};
-
-class ColumnList : public QList<Column>{
+#include <QQmlEngine>
+#include "jsonmodelcolumn.h"
+class JsonModelColumnList : public QList<JsonModelColumn>{
 public:
-    ColumnList() : QList<Column>(){}
-    inline ColumnList(std::initializer_list<Column> args) : QList<Column>(args) { }
+    JsonModelColumnList() : QList<JsonModelColumn>(){}
+    inline JsonModelColumnList(std::initializer_list<JsonModelColumn> args) : QList<JsonModelColumn>(args) { }
 
     bool contains(const QString &key){
-        for(const Column &column : *this){
-            if(column.accessKey==key){
+        for(const JsonModelColumn &column : *this){
+            if(column.m_accessKey==key){
                 return true;
             }
         }
         return false;
     }
-    ColumnList & operator <<(const Column &column){
+    JsonModelColumnList & operator <<(const JsonModelColumn &column){
         append(column);
         return *this;
     }
 
     operator QJsonArray(){
         QJsonArray array;
-        for(const Column &column : *this)
-            array << column.accessKey;
+        for(const JsonModelColumn &column : *this)
+            array << column.m_accessKey;
 
         return array;
     }
@@ -55,10 +43,13 @@ public:
 class JsonModel : public QAbstractTableModel
 {
     Q_OBJECT
+    QML_ELEMENT
 public:
     Q_PROPERTY(bool checkable MEMBER m_checkable READ checkable WRITE setCheckable NOTIFY checkableChanged)
-//    explicit JsonModel(QObject *parent = nullptr);
-    explicit JsonModel(QJsonArray data=QJsonArray(), ColumnList columns=ColumnList(), QObject *parent = nullptr);
+
+    Q_INVOKABLE explicit JsonModel(QObject *parent = nullptr);
+
+    explicit JsonModel(const QJsonArray data, JsonModelColumnList columns=JsonModelColumnList(), QObject *parent = nullptr);
     // Header:
     ~JsonModel();
      QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override; //columns compatible
@@ -69,7 +60,7 @@ public:
      int rowCount(const QModelIndex &parent = QModelIndex()) const override;
      int columnCount(const QModelIndex &parent = QModelIndex()) const override; //columns compatible
 
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override; //columns compatible
+    Q_INVOKABLE virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override; //columns compatible
     Q_INVOKABLE QJsonObject jsonObject(const int &row) const;
 
     // Editable:
@@ -81,11 +72,11 @@ public:
 
     // Add data:
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
-    //bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
+    //bool insertJsonModelColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
 
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
-    //bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
+    //bool removeJsonModelColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
 
     QJsonObject record() const;
     QJsonObject record(int index) const;
@@ -99,9 +90,9 @@ public:
     Q_INVOKABLE bool removeRecord(int row);
 
     Q_INVOKABLE QVariant data(int row,int column) const;
-    Q_INVOKABLE void setupData(const QJsonArray &data);
+    Q_INVOKABLE void setRecords(const QJsonArray &data);
 
-    ColumnList columns() const;
+    JsonModelColumnList columns() const;
     Q_INVOKABLE void appendRecord(const QJsonObject &record);
 
     Q_INVOKABLE int indexOf(const QString &key) const;
@@ -123,11 +114,14 @@ public:
 
     void setRecord(const QJsonObject &newRecord);
     void resetRecord();
+    void resetRecords();
 
+    const QJsonArray & records() const;
 signals:
     void checkableChanged(bool checkable);
 
     void recordChanged();
+    void recordsChanged();
 
 protected:
     //    QVector<QMap<QString,QJsonValue>> m;
@@ -135,12 +129,12 @@ protected:
     QJsonArray m_buffer;
 
     QJsonObject m_record;
-    ColumnList m_columns;
+    JsonModelColumnList m_columns;
     bool m_checkable=false;
-
     QMap<int,Qt::CheckState> m_checkList;
 private:
     Q_PROPERTY(QJsonObject record READ record WRITE setRecord RESET resetRecord NOTIFY recordChanged)
+    Q_PROPERTY(QJsonArray  records READ records WRITE setRecords RESET resetRecords NOTIFY recordsChanged)
 };
 
 #endif // JSONMODEL_H

@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
 import Qt.labs.qmlmodels 1.0
-
+import JsonModels
 Window {
     width: 640
     height: 480
@@ -18,8 +18,6 @@ Window {
         }
         boundsBehavior: Flickable.StopAtBounds
         syncView: tableView
-
-
     }
 
     TableView{
@@ -37,7 +35,21 @@ Window {
 
         onWidthChanged: forceLayout();
 
-        model: JsonModel
+        model: JsonModel{
+            records:[{"col1":"1","col2":"2"},{"col1":"2","col2":"2"}]
+
+
+
+        }
+
+
+
+
+
+
+//        JsonModelColumn{
+//            displayName: "test"
+//        }
 
         delegate: DelegateChooser{
             role: "delegateType"

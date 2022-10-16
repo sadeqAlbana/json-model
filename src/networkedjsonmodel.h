@@ -21,8 +21,8 @@ class NetworkedJsonModel : public JsonModel
     Q_PROPERTY(int currentPage MEMBER m_currentPage READ currentPage NOTIFY currentPageChanged WRITE setCurrentPage)
 
 public:
-    NetworkedJsonModel(QString Url, const ColumnList &columns=ColumnList(), QObject *parent=nullptr);
-    NetworkedJsonModel(const ColumnList &columns=ColumnList(), QObject *parent=nullptr);
+    NetworkedJsonModel(QString Url, const JsonModelColumnList &columns=JsonModelColumnList(), QObject *parent=nullptr);
+    NetworkedJsonModel(const JsonModelColumnList &columns=JsonModelColumnList(), QObject *parent=nullptr);
 
     Q_INVOKABLE void refresh();
     Q_INVOKABLE virtual void requestData()=0;

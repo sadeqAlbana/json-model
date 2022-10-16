@@ -9,12 +9,12 @@
 #include <QJsonDocument>
 #include <QDebug>
 
-NetworkedJsonModel::NetworkedJsonModel(QString Url,const ColumnList &columns, QObject *parent) : JsonModel(QJsonArray(),columns,parent), _url(Url)
+NetworkedJsonModel::NetworkedJsonModel(QString Url,const JsonModelColumnList &columns, QObject *parent) : JsonModel(QJsonArray(),columns,parent), _url(Url)
 {
 
 }
 
-NetworkedJsonModel::NetworkedJsonModel(const ColumnList &columns, QObject *parent) : JsonModel(QJsonArray(),columns,parent)
+NetworkedJsonModel::NetworkedJsonModel(const JsonModelColumnList &columns, QObject *parent) : JsonModel(QJsonArray(),columns,parent)
 {
 
 }

@@ -21,18 +21,18 @@ int main(int argc, char *argv[])
         modelData << row;
     }
 
-    JsonModel model(modelData,ColumnList() <<
-                    Column{"name","Name",QString(),"text"} <<
-                    Column{"qty","Stock","stock","text"} << //nested key
-                    Column{"value","Value",QString(),"currency"});
+//    JsonModel model(modelData,ColumnList() <<
+//                    Column{"name","Name",QString(),"text"} <<
+//                    Column{"qty","Stock","stock","text"} << //nested key
+//                    Column{"value","Value",QString(),"currency"});
 
 
     QQmlApplicationEngine engine;
 
-    engine.rootContext()->setContextProperty("JsonModel",&model);
+    //engine.rootContext()->setContextProperty("JsonModel",&model);
 
 
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    const QUrl url(u"qrc:/JsonModelDemo/main.qml"_qs);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)
