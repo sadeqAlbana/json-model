@@ -37,6 +37,10 @@ Window {
 
         model: JsonModel{
             records:[{"col1":"1","col2":"2"},{"col1":"2","col2":"2"}]
+
+            JsonModelColumn{
+
+            }
         }
 
 
