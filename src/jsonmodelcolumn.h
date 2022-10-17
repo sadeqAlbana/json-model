@@ -14,8 +14,6 @@ public:
     m_key(key),m_displayName(displayName),m_parentKey(parentKey),m_type(type){
         m_accessKey= parentKey.isEmpty() ?  key : QString("%1.%2").arg(parentKey,key);
     }
-
-
     QString m_key;
     QString m_displayName;
     QString m_parentKey;

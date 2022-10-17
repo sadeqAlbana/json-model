@@ -5,15 +5,16 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Qml)
 
 
 qt_add_library(jsonmodel STATIC
+    jsonmodel.cpp jsonmodel.h
+    jsonmodelcolumn.h jsonmodelcolumn.cpp
+    networkedjsonmodel.cpp networkedjsonmodel.h
+    qmljsonmodelcolumn.h qmljsonmodelcolumn.cpp
 )
 qt_add_qml_module(jsonmodel
     URI "JsonModels"
     VERSION 1.0
     SOURCES
-    jsonmodel.cpp jsonmodel.h
-    jsonmodelcolumn.h jsonmodelcolumn.cpp
-    networkedjsonmodel.cpp networkedjsonmodel.h
-
+    qmljsonmodel.h qmljsonmodel.cpp
 
 )
 

@@ -11,7 +11,7 @@
 
 JsonModel::JsonModel(QObject *parent) : QAbstractTableModel(parent)
 {
-    qDebug()<<"this called";
+
 }
 
 JsonModel::JsonModel(QJsonArray data, JsonModelColumnList columns, QObject *parent) : QAbstractTableModel(parent),m_columns(columns)
