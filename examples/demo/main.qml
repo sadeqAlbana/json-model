@@ -36,11 +36,26 @@ Window {
         onWidthChanged: forceLayout();
 
         model: JsonModel{
-            records:[{"col1":"1","col2":"2"},{"col1":"2","col2":"2"}]
 
             JsonModelColumn{
+                displayName: "test1"
+                key:"col1"
+                accessKey: "col1"  //need to autoset access key
+                type: "text"
 
             }
+
+            JsonModelColumn{
+                displayName: "test2"
+                key:"col2"
+                accessKey: "col2" //need to autoset access key
+
+                type: "text"
+
+            }
+
+            records:[{"col1":"1","col2":"2"},{"col1":"2","col2":"2"}]
+
         }
 
 
@@ -55,17 +70,17 @@ Window {
         delegate: DelegateChooser{
             role: "delegateType"
             DelegateChoice{ roleValue: "text"; ItemDelegate{contentItem:Text{text: model.display} }}
-            DelegateChoice{ roleValue: "currency"; ItemDelegate{
-                    contentItem: Text{
-                        text: "$"+formatNumber(model.display)
+//            DelegateChoice{ roleValue: "currency"; ItemDelegate{
+//                    contentItem: Text{
+//                        text: "$"+formatNumber(model.display)
 
-                    }
+//                    }
 
-                    function formatNumber(num) {
-                        return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-                    }
+//                    function formatNumber(num) {
+//                        return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+//                    }
 
-                }}
+//                }}
         }
     }
 }

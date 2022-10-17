@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include "jsonmodelcolumn.h"
-class QmlJsonModelColumn : public QObject, JsonModelColumn
+class QmlJsonModelColumn : public QObject, public JsonModelColumn
 {
     Q_OBJECT
     QML_NAMED_ELEMENT(JsonModelColumn)
