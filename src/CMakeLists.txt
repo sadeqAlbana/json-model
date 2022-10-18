@@ -18,6 +18,9 @@ qt_add_qml_module(jsonmodel
 
 )
 
-target_link_libraries(jsonmodel PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml)
+set(JSONMODEL_LIBS Qt${QT_VERSION_MAJOR}::Core)
+list(APPEND JSONMODEL_LIBS Qt${QT_VERSION_MAJOR}::Qml)
+
+target_link_libraries(jsonmodel PRIVATE ${QJSONMODEL_LIBS})
 
 target_include_directories(jsonmodel INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
