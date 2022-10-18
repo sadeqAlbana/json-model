@@ -40,18 +40,12 @@ Window {
             JsonModelColumn{
                 displayName: "test1"
                 key:"col1"
-                accessKey: "col1"  //need to autoset access key
-                type: "text"
 
             }
 
             JsonModelColumn{
                 displayName: "test2"
                 key:"col2"
-                accessKey: "col2" //need to autoset access key
-
-                type: "text"
-
             }
 
             records:[{"col1":"1","col2":"2"},{"col1":"2","col2":"2"}]
@@ -63,9 +57,7 @@ Window {
 
 
 
-        JsonModelColumn{
-            //displayName: "test"
-        }
+
 
         delegate: DelegateChooser{
             role: "delegateType"

@@ -1,7 +1,7 @@
 #include "jsonmodelcolumn.h"
 
 
-JsonModelColumn::JsonModelColumn()
+JsonModelColumn::JsonModelColumn() : m_type(QStringLiteral("text"))
 {
 
 }

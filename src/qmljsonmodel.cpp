@@ -45,18 +45,24 @@ QmlJsonModelColumn *QmlJsonModel::columnList_at(QQmlListProperty<QmlJsonModelCol
 void QmlJsonModel::columnList_clear(QQmlListProperty<QmlJsonModelColumn> *property)
 {
     QmlJsonModel *model = static_cast<QmlJsonModel*>(property->object);
-    return model->m_qmlColumnList.clear(); //needs fix
+    model->m_qmlColumnList.clear();
+    model->m_columns.clear();
 }
 
 void QmlJsonModel::columnList_replace(QQmlListProperty<QmlJsonModelColumn> *property, qsizetype index, QmlJsonModelColumn *value)
 {
     QmlJsonModel *model = static_cast<QmlJsonModel*>(property->object);
-     if (QmlJsonModelColumn *column = qobject_cast<QmlJsonModelColumn*>(value))
-         return model->m_qmlColumnList.replace(index, column); //needs fix
+     if (QmlJsonModelColumn *column = qobject_cast<QmlJsonModelColumn*>(value)){
+         return model->m_qmlColumnList.replace(index, column);
+         return model->m_columns.replace(index, *column);
+
+     }
 }
 
 void QmlJsonModel::columnList_removeLast(QQmlListProperty<QmlJsonModelColumn> *property)
 {
     QmlJsonModel *model = static_cast<QmlJsonModel*>(property->object);
     model->m_qmlColumnList.removeLast();
+    model->m_columns.removeLast();
+
 }
