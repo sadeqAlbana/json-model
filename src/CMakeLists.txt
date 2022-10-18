@@ -8,12 +8,12 @@ qt_add_library(jsonmodel STATIC
     jsonmodel.cpp jsonmodel.h
     jsonmodelcolumn.h jsonmodelcolumn.cpp
     networkedjsonmodel.cpp networkedjsonmodel.h
-    qmljsonmodelcolumn.h qmljsonmodelcolumn.cpp
 )
 qt_add_qml_module(jsonmodel
     URI "JsonModels"
     VERSION 1.0
     SOURCES
+    qmljsonmodelcolumn.h qmljsonmodelcolumn.cpp
     qmljsonmodel.h qmljsonmodel.cpp
 
 )
