@@ -337,7 +337,6 @@ bool JsonModel::removeRecord(int row)
 void JsonModel::setRecords(const QJsonArray &data)
 {
     beginResetModel();
-    qDebug()<<data;
     m_record=QJsonObject();
     m_buffer=QJsonArray();
 //    for(const QJsonValue &row : data)
