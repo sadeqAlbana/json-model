@@ -52,7 +52,7 @@ public:
     explicit JsonModel(const QJsonArray data, JsonModelColumnList columns=JsonModelColumnList(), QObject *parent = nullptr);
     // Header:
     ~JsonModel();
-     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override; //columns compatible
+     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override; //columns compatible
 
     //bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole) override;
 

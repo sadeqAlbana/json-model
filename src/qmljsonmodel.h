@@ -19,6 +19,7 @@ public:
     static void columnList_clear(QQmlListProperty<QmlJsonModelColumn> *property);
     static void columnList_replace(QQmlListProperty<QmlJsonModelColumn> *property, qsizetype index, QmlJsonModelColumn *value);
     static void columnList_removeLast(QQmlListProperty<QmlJsonModelColumn> *property);
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override; //columns compatible
 
 private:
     Q_PROPERTY(QQmlListProperty<QmlJsonModelColumn> columnList READ qmlColumnList CONSTANT FINAL)

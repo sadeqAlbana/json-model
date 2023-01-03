@@ -53,8 +53,8 @@ void QmlJsonModel::columnList_replace(QQmlListProperty<QmlJsonModelColumn> *prop
 {
     QmlJsonModel *model = static_cast<QmlJsonModel*>(property->object);
      if (QmlJsonModelColumn *column = qobject_cast<QmlJsonModelColumn*>(value)){
-         return model->m_qmlColumnList.replace(index, column);
-         return model->m_columns.replace(index, *column);
+          model->m_qmlColumnList.replace(index, column);
+          model->m_columns.replace(index, *column);
 
      }
 }
@@ -66,3 +66,28 @@ void QmlJsonModel::columnList_removeLast(QQmlListProperty<QmlJsonModelColumn> *p
     model->m_columns.removeLast();
 
 }
+
+QVariant QmlJsonModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if(orientation==Qt::Vertical)
+        return QVariant();
+
+    if(m_qmlColumnList.size() && section >= m_qmlColumnList.size()){
+        return QVariant();
+    }else
+        if(m_record.count() && section >= m_record.count()){
+        return QVariant();
+    }
+
+
+    if(role==Qt::EditRole){
+        return  m_qmlColumnList.size() ? m_qmlColumnList.at(section)->m_accessKey : fieldName(section);
+    }
+
+    if(role==Qt::DisplayRole){
+        return  m_qmlColumnList.size() ? m_qmlColumnList.at(section)->m_displayName : fieldName(section);
+    }
+
+    return QVariant();
+}
+
