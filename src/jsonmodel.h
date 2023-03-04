@@ -79,7 +79,7 @@ public:
     //bool removeJsonModelColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
 
     QJsonObject record() const;
-    QJsonObject record(int index) const;
+    Q_INVOKABLE QJsonObject record(int index) const;
     bool appendData(const QJsonArray &data);
     QString fieldName(int index) const;
 
