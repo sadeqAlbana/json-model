@@ -13,6 +13,14 @@
 #include <QJsonObject>
 #include <QQmlEngine>
 #include "jsonmodelcolumn.h"
+
+inline void swap(QJsonValueRef v1, QJsonValueRef v2)
+{
+    QJsonValue temp(v1);
+    v1 = QJsonValue(v2);
+    v2 = temp;
+}
+
 class JsonModelColumnList : public QList<JsonModelColumn>{
 public:
     JsonModelColumnList() : QList<JsonModelColumn>(){}
@@ -117,6 +125,10 @@ public:
     void resetRecords();
 
     const QJsonArray & records() const;
+
+    Q_INVOKABLE void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
+    Q_INVOKABLE void sort(const QString &key, Qt::SortOrder order = Qt::AscendingOrder);
+
 signals:
     void checkableChanged(bool checkable);
 
@@ -132,6 +144,7 @@ protected:
     JsonModelColumnList m_columns;
     bool m_checkable=false;
     QMap<int,Qt::CheckState> m_checkList;
+    void loadRecord();
 private:
     Q_PROPERTY(QJsonObject record READ record WRITE setRecord RESET resetRecord NOTIFY recordChanged)
     Q_PROPERTY(QJsonArray  records READ records WRITE setRecords RESET resetRecords NOTIFY recordsChanged)

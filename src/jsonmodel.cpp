@@ -7,8 +7,8 @@
 
 #include "jsonmodel.h"
 #include <QDebug>
-
-
+#include <QJsonValue>
+#include <algorithm>
 JsonModel::JsonModel(QObject *parent) : QAbstractTableModel(parent)
 {
 
@@ -238,6 +238,8 @@ bool JsonModel::insertRows(int row, int count, const QModelIndex &parent)
 
     endInsertRows();
 
+
+
     return true;
 }
 
@@ -339,27 +341,11 @@ void JsonModel::setRecords(const QJsonArray &data)
     beginResetModel();
     m_record=QJsonObject();
     m_buffer=QJsonArray();
-//    for(const QJsonValue &row : data)
-//    {
-//        m_records << row.toObject();
-//    }
-
 
     m_records=data;
 
 
-    QJsonObject record;
-    if(columns().size()){ //if columns are defined the use them
-        for (const JsonModelColumn &column : columns()) {
-            record[column.m_accessKey]=QJsonValue();
-        }
-    }
-    else{
-        record=data.at(0).toObject(); //take the first record
-        for(const QString &key: record.keys())
-            record.insert(key,QJsonValue()); //clear it's values
-    }
-    setRecord(record);
+    loadRecord();
     endResetModel();
 
 
@@ -374,6 +360,11 @@ JsonModelColumnList JsonModel::columns() const
 
 void JsonModel::appendRecord(const QJsonObject &record)
 {
+    if(!rowCount()){
+        setRecords(QJsonArray{record});
+        return;
+    }
+
     m_buffer << record;
     insertRows(rowCount(),1);
 }
@@ -482,6 +473,41 @@ void JsonModel::resetRecords()
 const QJsonArray &JsonModel::records() const
 {
     return m_records;
+}
+
+void JsonModel::sort(int column, Qt::SortOrder order)
+{
+    std::sort(m_records.begin(),m_records.end(),[this,column](const QJsonValue &a, const QJsonValue &b){
+        QString key=this->headerData(column,Qt::Horizontal,Qt::EditRole).toString();
+        return a[key].toString()<b[key].toString();
+
+    });
+
+    emit layoutChanged();
+}
+
+void JsonModel::sort(const QString &key, Qt::SortOrder order)
+{
+    sort(indexOf(key),order);
+}
+
+void JsonModel::loadRecord()
+{
+    if(!m_records.size())
+        return;
+
+    QJsonObject record;
+    if(columns().size()){ //if columns are defined the use them
+        for (const JsonModelColumn &column : columns()) {
+            record[column.m_accessKey]=QJsonValue();
+        }
+    }
+    else{
+        record=m_records.at(0).toObject(); //take the first record
+        for(const QString &key: record.keys())
+            record.insert(key,QJsonValue()); //clear it's values
+    }
+    setRecord(record);
 }
 
 
