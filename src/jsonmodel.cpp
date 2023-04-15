@@ -394,6 +394,7 @@ QHash<int, QByteArray> JsonModel::roleNames() const
 
     if(checkable()){
         roles.insert(Qt::CheckStateRole,"checkState");
+        qDebug()<<"model is checkable !";
     }
 
 
@@ -449,7 +450,19 @@ QSet<int> JsonModel::checkedRows()
 bool JsonModel::insertRecord(const QJsonObject &record)
 {
     m_buffer << record;
-    return insertRows(0,1);
+  return insertRows(0,1);
+}
+
+void JsonModel::uncheckAll()
+{
+//  for(auto &checkState : m_checkList){
+//      checkState=Qt::Unchecked;
+//  }
+//  emit dataChanged(index(0,0),index(0,0),QList<int>{Qt::CheckStateRole});
+
+  for(int i=0; i<rowCount(); i++){
+      setData(index(i,0),Qt::Unchecked,Qt::CheckStateRole);
+  }
 }
 
 void JsonModel::setRecord(const QJsonObject &newRecord)
@@ -511,6 +524,26 @@ void JsonModel::loadRecord()
 }
 
 
+int JsonModel::matchChecked(const QJsonArray &checked, const QString &localKey, const QString &foriegnKey)
+{
+    if(!m_checkable)
+        return -1;
+
+    int  matched=0;
+    for(int i=0; i<rowCount(); i++){
+        QVariant localValue=data(i,localKey);
+        for(int j=0; j<checked.size(); j++){
+            QVariant foriegnValue=checked[j][foriegnKey];
+            if(localValue==foriegnValue){
+                matched++;
+                setData(this->index(i,0),Qt::Checked,Qt::CheckStateRole);
+                break;
+            }
+
+        }
+    }
+    return matched;
+}
 
 
 

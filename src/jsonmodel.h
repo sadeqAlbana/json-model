@@ -119,6 +119,7 @@ public:
     QSet<int> checkedRows();
 
     Q_INVOKABLE bool insertRecord(const QJsonObject &record);
+    Q_INVOKABLE void uncheckAll();
 
     void setRecord(const QJsonObject &newRecord);
     void resetRecord();
@@ -128,6 +129,7 @@ public:
 
     Q_INVOKABLE void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
     Q_INVOKABLE void sort(const QString &key, Qt::SortOrder order = Qt::AscendingOrder);
+    Q_INVOKABLE int matchChecked(const QJsonArray &checked, const QString &localKey, const QString &foriegnKey);
 
 signals:
     void checkableChanged(bool checkable);

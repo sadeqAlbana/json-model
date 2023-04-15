@@ -78,3 +78,4 @@ bool NetworkedJsonModel::hasPagination() const
 {
     return m_hasPagination;
 }
+
