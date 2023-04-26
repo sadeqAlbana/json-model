@@ -111,6 +111,7 @@ public:
     virtual QJsonArray filterData(QJsonArray data);
 
     Q_INVOKABLE QJsonArray toJsonArray() const;
+    Q_INVOKABLE QJsonArray toJsonArray(const Qt::CheckState checkState) const;
 
 
     bool checkable() const;

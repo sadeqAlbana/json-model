@@ -25,10 +25,10 @@ JsonModel::JsonModel(QJsonArray data, JsonModelColumnList columns, QObject *pare
                 record[column.m_accessKey]=QJsonValue();
             }
             setRecord(record);
-//            qDebug()<<record.keys();
-//            for(int i=0; i<m_record.count(); i++){
-//                qDebug()<<fieldName(i);
-//            }
+            //            qDebug()<<record.keys();
+            //            for(int i=0; i<m_record.count(); i++){
+            //                qDebug()<<fieldName(i);
+            //            }
         }
     }
 }
@@ -47,8 +47,8 @@ QVariant JsonModel::headerData(int section, Qt::Orientation orientation, int rol
         return QVariant();
     }else
         if(m_record.count() && section >= m_record.count()){
-        return QVariant();
-    }
+            return QVariant();
+        }
 
 
     if(role==Qt::EditRole){
@@ -405,8 +405,8 @@ QHash<int, QByteArray> JsonModel::roleNames() const
 
 
     for (int i=0;i<columnCount();i++) {
-     QByteArray roleName=headerData(i,Qt::Horizontal,Qt::EditRole).toString().toUtf8();
-     roles.insert(Qt::UserRole+1+i,roleName);
+        QByteArray roleName=headerData(i,Qt::Horizontal,Qt::EditRole).toString().toUtf8();
+        roles.insert(Qt::UserRole+1+i,roleName);
     }
 
     //qDebug()<<"rolenames: "<<roles;
@@ -424,6 +424,17 @@ QJsonArray JsonModel::toJsonArray() const
     return m_records;
 }
 
+QJsonArray JsonModel::toJsonArray(const Qt::CheckState checkState) const
+{
+    QJsonArray records;
+    for(int i=0; i<rowCount(); i++){
+        if(data(index(0,0),Qt::CheckStateRole)==checkState){
+            records << m_records.at(i);
+        }
+    }
+    return records;
+}
+
 bool JsonModel::checkable() const
 {
     return m_checkable;
@@ -437,32 +448,32 @@ void JsonModel::setCheckable(bool checkable)
 
 QSet<int> JsonModel::checkedRows()
 {
-  QSet<int> checked;
-  for(int i=0; i<rowCount(); i++){
-      if(m_checkList.value(i,Qt::Unchecked)==Qt::Checked){
-          checked.insert(i);
-      }
-  }
+    QSet<int> checked;
+    for(int i=0; i<rowCount(); i++){
+        if(m_checkList.value(i,Qt::Unchecked)==Qt::Checked){
+            checked.insert(i);
+        }
+    }
 
-  return checked;
+    return checked;
 }
 
 bool JsonModel::insertRecord(const QJsonObject &record)
 {
     m_buffer << record;
-  return insertRows(0,1);
+    return insertRows(0,1);
 }
 
 void JsonModel::uncheckAll()
 {
-//  for(auto &checkState : m_checkList){
-//      checkState=Qt::Unchecked;
-//  }
-//  emit dataChanged(index(0,0),index(0,0),QList<int>{Qt::CheckStateRole});
+    //  for(auto &checkState : m_checkList){
+    //      checkState=Qt::Unchecked;
+    //  }
+    //  emit dataChanged(index(0,0),index(0,0),QList<int>{Qt::CheckStateRole});
 
-  for(int i=0; i<rowCount(); i++){
-      setData(index(i,0),Qt::Unchecked,Qt::CheckStateRole);
-  }
+    for(int i=0; i<rowCount(); i++){
+        setData(index(i,0),Qt::Unchecked,Qt::CheckStateRole);
+    }
 }
 
 void JsonModel::setRecord(const QJsonObject &newRecord)
