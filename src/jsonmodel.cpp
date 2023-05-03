@@ -394,7 +394,6 @@ QHash<int, QByteArray> JsonModel::roleNames() const
 
     if(checkable()){
         roles.insert(Qt::CheckStateRole,"checkState");
-        qDebug()<<"model is checkable !";
     }
 
 
@@ -428,7 +427,7 @@ QJsonArray JsonModel::toJsonArray(const Qt::CheckState checkState) const
 {
     QJsonArray records;
     for(int i=0; i<rowCount(); i++){
-        if(data(index(0,0),Qt::CheckStateRole)==checkState){
+        if(data(index(i,0),Qt::CheckStateRole)==checkState){
             records << m_records.at(i);
         }
     }
