@@ -283,7 +283,8 @@ QJsonObject JsonModel::record() const
     return m_record;
 }
 
-QJsonObject JsonModel::record(int index) const
+
+QJsonObject JsonModel::recordAt(int index) const
 {
     if(index>=rowCount() || index<0)
         return QJsonObject();
