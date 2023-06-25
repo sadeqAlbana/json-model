@@ -121,11 +121,16 @@ public:
     QSet<int> checkedRows();
 
     Q_INVOKABLE bool insertRecord(const QJsonObject &record);
-    Q_INVOKABLE void uncheckAll();
+    Q_INVOKABLE bool uncheckAll();
+    Q_INVOKABLE bool checkAll();
 
     void setRecord(const QJsonObject &newRecord);
     void resetRecord();
     void resetRecords();
+
+    bool setCheckStateForRecords(Qt::CheckState checkState);
+
+    Q_INVOKABLE Qt::CheckState checkState() const;
 
     const QJsonArray & records() const;
 
