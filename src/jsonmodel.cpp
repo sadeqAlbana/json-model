@@ -392,6 +392,7 @@ QHash<int, QByteArray> JsonModel::roleNames() const
 {
     QHash<int,QByteArray> roles;
     roles.insert(Qt::DisplayRole, "display");
+    roles.insert(Qt::EditRole, "edit");
 
     if(checkable()){
         roles.insert(Qt::CheckStateRole,"checkState");
