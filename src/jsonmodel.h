@@ -51,7 +51,6 @@ public:
 class JsonModel : public QAbstractTableModel
 {
     Q_OBJECT
-    QML_ELEMENT
 public:
     Q_PROPERTY(bool checkable MEMBER m_checkable READ checkable WRITE setCheckable NOTIFY checkableChanged)
 

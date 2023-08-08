@@ -91,3 +91,13 @@ QVariant QmlJsonModel::headerData(int section, Qt::Orientation orientation, int 
     return QVariant();
 }
 
+void QmlJsonModel::classBegin()
+{
+
+}
+
+void QmlJsonModel::componentComplete()
+{
+    loadRecord();
+}
+

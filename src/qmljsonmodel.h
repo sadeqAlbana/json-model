@@ -3,7 +3,7 @@
 
 #include "jsonmodel.h"
 #include "qmljsonmodelcolumn.h"
-class QmlJsonModel : public JsonModel
+class QmlJsonModel : public JsonModel, public QQmlParserStatus
 {
     Q_OBJECT
     QML_NAMED_ELEMENT(JsonModel)
@@ -20,7 +20,8 @@ public:
     static void columnList_replace(QQmlListProperty<QmlJsonModelColumn> *property, qsizetype index, QmlJsonModelColumn *value);
     static void columnList_removeLast(QQmlListProperty<QmlJsonModelColumn> *property);
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override; //columns compatible
-
+    void classBegin() override;
+    void componentComplete() override;
 private:
     Q_PROPERTY(QQmlListProperty<QmlJsonModelColumn> columnList READ qmlColumnList CONSTANT FINAL)
 };
