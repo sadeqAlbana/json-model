@@ -9,7 +9,7 @@
 #include <QJsonDocument>
 #include <QDebug>
 
-NetworkedJsonModel::NetworkedJsonModel(QString Url,const JsonModelColumnList &columns, QObject *parent) : JsonModel(QJsonArray(),columns,parent), _url(Url)
+NetworkedJsonModel::NetworkedJsonModel(QString Url,const JsonModelColumnList &columns, QObject *parent) : JsonModel(QJsonArray(),columns,parent), m_url(Url)
 {
 
 }
@@ -43,7 +43,7 @@ bool NetworkedJsonModel::canFetchMore(const QModelIndex &parent) const
     if(!m_hasPagination)
         return false;
 
-    return (m_currentPage<_lastPage && !_busy);
+    return (m_currentPage<m_lastPage && !m_busy);
 }
 
 void NetworkedJsonModel::fetchMore(const QModelIndex &parent)
@@ -54,19 +54,26 @@ void NetworkedJsonModel::fetchMore(const QModelIndex &parent)
 
 void NetworkedJsonModel::setUrl(const QString &url)
 {
-    this->_url=url;
-    emit urlChanged(url);
+    if(m_url==url)
+        return;
+
+    m_url=url;
+    emit urlChanged();
 }
 
 QString NetworkedJsonModel::url() const
 {
-    return _url;
+    return m_url;
 }
 
 void NetworkedJsonModel::setCurrentPage(int currentPage)
 {
+    if(m_currentPage==currentPage){
+        return;
+    }
+
     m_currentPage = currentPage;
-    emit currentPageChanged(m_currentPage);
+    emit currentPageChanged();
 }
 
 int NetworkedJsonModel::currentPage() const

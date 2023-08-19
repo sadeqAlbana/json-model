@@ -17,8 +17,8 @@ class NetworkResponse;
 class NetworkedJsonModel : public JsonModel
 {
     Q_OBJECT
-    Q_PROPERTY(QString url MEMBER _url READ url NOTIFY urlChanged WRITE setUrl)
-    Q_PROPERTY(int currentPage MEMBER m_currentPage READ currentPage NOTIFY currentPageChanged WRITE setCurrentPage)
+    Q_PROPERTY(QString url  READ url NOTIFY urlChanged WRITE setUrl)
+    Q_PROPERTY(int currentPage READ currentPage WRITE setCurrentPage NOTIFY currentPageChanged)
 
 public:
     NetworkedJsonModel(QString Url, const JsonModelColumnList &columns=JsonModelColumnList(), QObject *parent=nullptr);
@@ -38,14 +38,14 @@ public:
     bool hasPagination() const;
 
 signals:
-    void urlChanged(QString url);
-    void currentPageChanged(int page);
+    void urlChanged();
+    void currentPageChanged();
 
 protected:
-    QString _url;
+    QString m_url;
     bool m_hasPagination=false;
-    int _lastPage=-1;
-    bool _busy;
+    int m_lastPage=-1;
+    bool m_busy;
     int m_currentPage=0;
 
 signals:
