@@ -120,7 +120,7 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
     }
 
     if(role>Qt::UserRole){ //used for QML views
-        int column=role-(Qt::UserRole+1);
+        int column=role-(Qt::UserRole+1000);
         return data(this->index(index.row(),column));
     }
 
@@ -196,7 +196,7 @@ bool JsonModel::setData(const QModelIndex &index, const QVariant &value, int rol
         }
 
         if(role>Qt::UserRole){ //used for QML views
-            int column=role-(Qt::UserRole+1);
+            int column=role-(Qt::UserRole+1000);
             return setData(this->index(index.row(),column),value);
         }
 
@@ -407,7 +407,7 @@ QHash<int, QByteArray> JsonModel::roleNames() const
 
     for (int i=0;i<columnCount();i++) {
         QByteArray roleName=headerData(i,Qt::Horizontal,Qt::EditRole).toString().toUtf8();
-        roles.insert(Qt::UserRole+1+i,roleName);
+        roles.insert(Qt::UserRole+1000+i,roleName);
     }
 
     //qDebug()<<"rolenames: "<<roles;
