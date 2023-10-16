@@ -21,6 +21,8 @@ inline void swap(QJsonValueRef v1, QJsonValueRef v2)
     v2 = temp;
 }
 
+
+
 class JsonModelColumnList : public QList<JsonModelColumn>{
 public:
     JsonModelColumnList() : QList<JsonModelColumn>(){}
@@ -52,6 +54,13 @@ class JsonModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
+
+    enum ItemDataRole{
+        LinkRole = 1001,
+        LinkKeyRole = 1002,
+        LinkKeyDataRole = 1003
+    };
+
     Q_PROPERTY(bool checkable MEMBER m_checkable READ checkable WRITE setCheckable NOTIFY checkableChanged)
 
     Q_INVOKABLE explicit JsonModel(QObject *parent = nullptr);

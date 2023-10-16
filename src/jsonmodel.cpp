@@ -96,6 +96,28 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
         return m_checkList.value(index.row(),Qt::Unchecked);
     }
 
+    if(role>Qt::UserRole && columns().size()){
+
+        JsonModelColumn column=columns().at(index.column());
+
+        if(column.m_type=="link" && role==ItemDataRole::LinkRole){
+            QUrl link=column.m_metadata["link"].toUrl();
+            return link;
+        }
+        if(column.m_type=="link" && role==ItemDataRole::LinkKeyRole){
+            QString key=column.m_metadata["linkKey"].toString();
+            return key;
+        }
+
+        if(column.m_type=="link" && role==ItemDataRole::LinkKeyDataRole){
+            qDebug()<<"column metadata: " << column.m_metadata;
+            qDebug()<<"index column: " <<index.column();
+            QString key=column.m_metadata["linkKey"].toString();
+
+            return m_records.at(index.row())[key];
+        }
+    }
+
 
     if(role==Qt::DisplayRole || role==Qt::EditRole )
     {
@@ -121,6 +143,8 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
 
     if(role>Qt::UserRole){ //used for QML views
         int column=role-(Qt::UserRole+1000);
+
+
         return data(this->index(index.row(),column));
     }
 
@@ -393,6 +417,11 @@ QHash<int, QByteArray> JsonModel::roleNames() const
     QHash<int,QByteArray> roles;
     roles.insert(Qt::DisplayRole, "display");
     roles.insert(Qt::EditRole, "edit");
+
+    roles.insert(ItemDataRole::LinkRole,"__link");
+    roles.insert(ItemDataRole::LinkKeyRole,"__linkKey");
+    roles.insert(ItemDataRole::LinkKeyDataRole,"__linkKeyData");
+
 
     if(checkable()){
         roles.insert(Qt::CheckStateRole,"checkState");

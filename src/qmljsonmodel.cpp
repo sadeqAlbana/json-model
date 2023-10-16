@@ -22,11 +22,9 @@ QQmlListProperty<QmlJsonModelColumn> QmlJsonModel::qmlColumnList()
 void QmlJsonModel::columnList_append(QQmlListProperty<QmlJsonModelColumn> *property, QmlJsonModelColumn *value)
 {
     QmlJsonModel *model = static_cast<QmlJsonModel*>(property->object);
-
-    QmlJsonModelColumn *column = qobject_cast<QmlJsonModelColumn*>(value);
-    if (column){
-        model->m_qmlColumnList.append(column);
-        model->m_columns.append(*column);
+//    QmlJsonModelColumn *column = qobject_cast<QmlJsonModelColumn*>(value);
+    if (value){
+        model->m_qmlColumnList.append(value);
     }
 }
 
@@ -98,6 +96,9 @@ void QmlJsonModel::classBegin()
 
 void QmlJsonModel::componentComplete()
 {
+    for(int i=0; i<m_qmlColumnList.size(); i++){
+        m_columns.append(*m_qmlColumnList.at(i));
+    }
     loadRecord();
 }
 
