@@ -110,8 +110,6 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
         }
 
         if(column.m_type=="link" && role==ItemDataRole::LinkKeyDataRole){
-            qDebug()<<"column metadata: " << column.m_metadata;
-            qDebug()<<"index column: " <<index.column();
             QString key=column.m_metadata["linkKey"].toString();
 
             return m_records.at(index.row())[key];
