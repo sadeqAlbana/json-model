@@ -136,6 +136,8 @@ public:
     void resetRecord();
     void resetRecords();
 
+    int roleFromKey(const QString &key) const;
+
     bool setCheckStateForRecords(Qt::CheckState checkState);
 
     Q_INVOKABLE Qt::CheckState checkState() const;

@@ -520,6 +520,12 @@ void JsonModel::resetRecords()
     m_records=QJsonArray();
 }
 
+int JsonModel::roleFromKey(const QString &key) const
+{
+    auto roles =this->roleNames();
+    return roles.key(key.toUtf8());
+}
+
 bool JsonModel::setCheckStateForRecords(Qt::CheckState checkState)
 {
     if(!m_checkable){
