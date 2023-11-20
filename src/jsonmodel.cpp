@@ -576,9 +576,6 @@ void JsonModel::sort(const QString &key, Qt::SortOrder order)
 
 void JsonModel::loadRecord()
 {
-    if(!m_records.size())
-        return;
-
     QJsonObject record;
     if(columns().size()){ //if columns are defined the use them
         for (const JsonModelColumn &column : columns()) {
@@ -590,6 +587,7 @@ void JsonModel::loadRecord()
         for(const QString &key: record.keys())
             record.insert(key,QJsonValue()); //clear it's values
     }
+
     setRecord(record);
 }
 
