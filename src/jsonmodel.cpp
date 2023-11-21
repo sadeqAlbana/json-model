@@ -25,10 +25,6 @@ JsonModel::JsonModel(QJsonArray data, JsonModelColumnList columns, QObject *pare
                 record[column.m_accessKey]=QJsonValue();
             }
             setRecord(record);
-            //            qDebug()<<record.keys();
-            //            for(int i=0; i<m_record.count(); i++){
-            //                qDebug()<<fieldName(i);
-            //            }
         }
     }
 }
@@ -234,7 +230,14 @@ Qt::ItemFlags JsonModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return Qt::NoItemFlags;
 
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    if(m_columns.size()){
+        if(m_columns.at(index.column()).m_editable){
+            flags = flags | Qt::ItemIsEditable;
+        }
+    }
+
+    return flags;
 }
 
 bool JsonModel::insertRows(int row, int count, const QModelIndex &parent)

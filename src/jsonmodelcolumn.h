@@ -9,9 +9,9 @@ struct  JsonModelColumn{
 //https://stackoverflow.com/questions/42797359/how-to-create-new-instance-of-a-q-gadget-struct-in-qml
 public:
    JsonModelColumn();
-    JsonModelColumn(const QString &key, const QString &displayName,const QString &parentKey=QString(),const QString &type=QStringLiteral("text"),
+    JsonModelColumn(const QString &key, const QString &displayName,const QString &parentKey=QString(),bool editable=false,const QString &type=QStringLiteral("text"),
                    const QVariantMap metadata=QVariantMap()):
-       m_key(key),m_displayName(displayName),m_parentKey(parentKey),m_type(type),m_metadata(metadata){
+       m_key(key),m_displayName(displayName),m_parentKey(parentKey),m_type(type),m_editable(editable),m_metadata(metadata){
         m_accessKey= parentKey.isEmpty() ?  key : QString("%1.%2").arg(parentKey,key);
     }
     QString m_key;
@@ -19,6 +19,7 @@ public:
     QString m_parentKey;
     QString m_type;
     QString m_accessKey;
+    bool m_editable=false;
     QVariantMap m_metadata;
 };
 

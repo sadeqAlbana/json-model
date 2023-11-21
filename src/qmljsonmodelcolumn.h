@@ -14,6 +14,7 @@ class QmlJsonModelColumn : public QObject, public JsonModelColumn
     Q_PROPERTY(QString displayName MEMBER m_displayName)
     Q_PROPERTY(QString parentKey MEMBER m_parentKey)
     Q_PROPERTY(QString type MEMBER m_type)
+    Q_PROPERTY(bool editable MEMBER m_editable)
     Q_PROPERTY(QVariantMap metadata MEMBER m_metadata)
 
 public:
