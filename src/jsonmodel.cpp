@@ -434,10 +434,22 @@ QHash<int, QByteArray> JsonModel::roleNames() const
     }
 
 
-
+    int lastRoleId=-1;
     for (int i=0;i<columnCount();i++) {
+        lastRoleId=Qt::UserRole+1000+i;
         QByteArray roleName=headerData(i,Qt::Horizontal,Qt::EditRole).toString().toUtf8();
-        roles.insert(Qt::UserRole+1000+i,roleName);
+        roles.insert(lastRoleId,roleName);
+    }
+
+
+    if(columns().size()){
+        if(m_records.size()){
+            QJsonObject firstRecord=m_records.first().toObject();
+            QStringList keys=firstRecord.keys();
+            for(int i=0; i<keys.size(); i++){
+                roles.insert(++lastRoleId,QString("_%1").arg(keys.at(i)).toUtf8());
+            }
+        }
     }
 
     //qDebug()<<"rolenames: "<<roles;
