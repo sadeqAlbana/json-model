@@ -136,9 +136,16 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
     }
 
     if(role>Qt::UserRole){ //used for QML views
+
+        if(role>(Qt::UserRole+2000+m_columns.size())){
+            QString roleName=roleNames().value(role);
+            if(!roleName.isEmpty()){
+                roleName=roleName.removeFirst();
+                return m_records.at(index.row())[roleName];
+            }
+        }
+
         int column=role-(Qt::UserRole+1000);
-
-
         return data(this->index(index.row(),column));
     }
 
@@ -443,6 +450,7 @@ QHash<int, QByteArray> JsonModel::roleNames() const
 
 
     if(columns().size()){
+        lastRoleId+=1000;
         if(m_records.size()){
             QJsonObject firstRecord=m_records.first().toObject();
             QStringList keys=firstRecord.keys();
