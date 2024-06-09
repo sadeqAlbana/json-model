@@ -148,11 +148,16 @@ public:
     Q_INVOKABLE void sort(const QString &key, Qt::SortOrder order = Qt::AscendingOrder);
     Q_INVOKABLE int matchChecked(const QJsonArray &checked, const QString &localKey, const QString &foriegnKey);
 
+    bool useNestedParentKeys() const;
+    void setUseNestedParentKeys(bool newUseNestedParentKeys);
+
 signals:
     void checkableChanged(bool checkable);
 
     void recordChanged();
     void recordsChanged();
+
+    void useNestedParentKeysChanged();
 
 protected:
     //    QVector<QMap<QString,QJsonValue>> m;
@@ -164,9 +169,11 @@ protected:
     bool m_checkable=false;
     QMap<int,Qt::CheckState> m_checkList;
     void loadRecord();
+    bool m_useNestedParentKeys=false;
 private:
     Q_PROPERTY(QJsonObject record READ record WRITE setRecord RESET resetRecord NOTIFY recordChanged)
     Q_PROPERTY(QJsonArray  records READ records WRITE setRecords RESET resetRecords NOTIFY recordsChanged)
+    Q_PROPERTY(bool useNestedParentKeys READ useNestedParentKeys WRITE setUseNestedParentKeys NOTIFY useNestedParentKeysChanged FINAL)
 };
 
 #endif // JSONMODEL_H

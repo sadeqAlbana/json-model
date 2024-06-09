@@ -122,11 +122,28 @@ QVariant JsonModel::data(const QModelIndex &index, int role) const
                 value=m_records.at(index.row()).toObject().value(column.m_accessKey);
             }
             else{
-                value=m_records.at(index.row()).toObject().value(column.m_parentKey);
-                QMetaType::Type type=static_cast<QMetaType::Type>(value.typeId());
-                if(type==QMetaType::QVariantMap || type==QMetaType::QJsonValue || type==QMetaType::QJsonObject){
-                    value=value.toMap().value(column.m_key);
+                QStringList keys=column.m_parentKey.split('.');
+
+                if(!m_useNestedParentKeys || keys.count()<=1){
+                    value=m_records.at(index.row()).toObject().value(column.m_parentKey);
+                    QMetaType::Type type=static_cast<QMetaType::Type>(value.typeId());
+                    if(type==QMetaType::QVariantMap || type==QMetaType::QJsonValue || type==QMetaType::QJsonObject){
+                        value=value.toMap().value(column.m_key);
+                    }
+
+                }else{
+
+                    if(keys.count()==2){
+                        value=m_records.at(index.row()).toObject().value(keys[0]);
+                        QMetaType::Type type=static_cast<QMetaType::Type>(value.typeId());
+                        if(type==QMetaType::QVariantMap || type==QMetaType::QJsonValue || type==QMetaType::QJsonObject){
+                            value=value.toMap().value(keys[1]);
+                            value=value.toMap().value(column.m_key);
+                        }
+                    }
                 }
+
+
             }
             return value;
 
@@ -612,6 +629,19 @@ void JsonModel::loadRecord()
     }
 
     setRecord(record);
+}
+
+bool JsonModel::useNestedParentKeys() const
+{
+    return m_useNestedParentKeys;
+}
+
+void JsonModel::setUseNestedParentKeys(bool newUseNestedParentKeys)
+{
+    if (m_useNestedParentKeys == newUseNestedParentKeys)
+        return;
+    m_useNestedParentKeys = newUseNestedParentKeys;
+    emit useNestedParentKeysChanged();
 }
 
 
