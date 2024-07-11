@@ -11,17 +11,20 @@
 
 NetworkedJsonModel::NetworkedJsonModel(QString Url,const JsonModelColumnList &columns, QObject *parent) : JsonModel(QJsonArray(),columns,parent), m_url(Url)
 {
-
+    setupCanFetchMoreTimer();
 }
 
 NetworkedJsonModel::NetworkedJsonModel(const JsonModelColumnList &columns, QObject *parent) : JsonModel(QJsonArray(),columns,parent)
 {
-
+    setupCanFetchMoreTimer();
 }
 
 
 void NetworkedJsonModel::refresh()
 {
+    if(m_busy)
+        return;
+
     m_currentPage=0;
     requestData();
 }
@@ -43,7 +46,16 @@ bool NetworkedJsonModel::canFetchMore(const QModelIndex &parent) const
     if(!m_hasPagination)
         return false;
 
-    return (m_currentPage<m_lastPage && !m_busy);
+
+    if(m_canFetchMoreTimerLimit){
+        return false;
+    }
+
+    if(m_busy){
+        return false;
+    }
+
+    return (m_currentPage<m_lastPage);
 }
 
 void NetworkedJsonModel::fetchMore(const QModelIndex &parent)
@@ -86,3 +98,14 @@ bool NetworkedJsonModel::hasPagination() const
     return m_hasPagination;
 }
 
+void NetworkedJsonModel::setupCanFetchMoreTimer()
+{
+    m_canFetchMoreTimer.setInterval(1000);
+    connect(&m_canFetchMoreTimer,&QTimer::timeout,this,[this](){m_canFetchMoreTimerLimit=false;});
+}
+
+void NetworkedJsonModel::activateCanFetchMoreLimiter()
+{
+    m_canFetchMoreTimerLimit=true;
+    m_canFetchMoreTimer.start();
+}
