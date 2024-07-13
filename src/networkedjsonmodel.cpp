@@ -22,8 +22,10 @@ NetworkedJsonModel::NetworkedJsonModel(const JsonModelColumnList &columns, QObje
 
 void NetworkedJsonModel::refresh()
 {
-    if(m_busy)
+    if(m_busy){
+        qWarning()<<"NetworkedJsonModel::refresh: it's busy, returning...";
         return;
+    }
 
     m_currentPage=0;
     requestData();

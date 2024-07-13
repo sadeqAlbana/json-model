@@ -46,7 +46,7 @@ protected:
     QString m_url;
     bool m_hasPagination=false;
     int m_lastPage=-1;
-    bool m_busy;
+    bool m_busy=false;
     bool m_canFetchMoreTimerLimit=false;
     int m_currentPage=0;
     QTimer m_canFetchMoreTimer;
