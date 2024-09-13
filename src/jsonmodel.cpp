@@ -60,8 +60,8 @@ QVariant JsonModel::headerData(int section, Qt::Orientation orientation, int rol
 
 int JsonModel::rowCount(const QModelIndex &parent) const
 {
-    if(parent.isValid())
-        return 0;
+    // if(parent.isValid())
+    //     return 0;
 
     return m_records.count();
 }
