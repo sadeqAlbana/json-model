@@ -193,7 +193,7 @@ bool JsonModel::setData(const QModelIndex &index, const QVariant &value, int rol
 
         if(role==Qt::CheckStateRole && checkable()){
             m_checkList[index.row()]=static_cast<Qt::CheckState>(value.toInt());
-            emit dataChanged(index, index); //assume all roles have changed, inefficent !
+            emit dataChanged(index,index.siblingAtColumn(columnCount()-1)); //assume all roles have changed, inefficent !
             return true;
         }
 
@@ -393,6 +393,7 @@ void JsonModel::setRecords(const QJsonArray &data)
     m_buffer=QJsonArray();
 
     m_records=data;
+    m_checkList.clear();
 
 
     loadRecord();
